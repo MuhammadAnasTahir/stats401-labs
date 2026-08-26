@@ -42,3 +42,16 @@ p {
     background: #333;
     color: white;
 }
+
+.bar {
+    fill: steelblue;
+}
+
+.bar:hover {
+    fill: #2a5d84;
+}
+
+.label {
+    font-size: 12px;
+    fill: #333;
+}
