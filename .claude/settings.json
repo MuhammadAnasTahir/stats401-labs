@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/LAB%201/lab1.js\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/css/style.css\")",
+      "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/data/students.csv\")"
+    ]
+  }
+}
