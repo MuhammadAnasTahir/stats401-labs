@@ -1,51 +1,92 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
-
-    <title>Lab 2 - Multivariate Visualization</title>
-
-    <link rel="stylesheet"
-          href="../css/style.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Lab 2 - Four-Dimensional Visualization</title>
 </head>
 
 <body>
 
-<header>
-    <h1>STATS 401</h1>
-    <p>Data Acquisition and Visualization</p>
-</header>
+    <h1>Lab 2: Four-Dimensional Visualization</h1>
 
-<nav class="lab-nav">
-    <a href="../index.html">Home</a>
-    <a href="../LAB 1/index.html">Lab 1</a>
-    <a href="../LAB 2/index.html">Lab 2</a>
-    <a href="../LAB 3/index.html">Lab 3</a>
-    <a href="../LAB 4/index.html">Lab 4</a>
-    <a href="../LAB 5/index.html">Lab 5</a>
-    <a href="../LAB 6/index.html">Lab 6</a>
-    <a href="../LAB 7/index.html">Lab 7</a>
-    <a href="../LAB 8/index.html">Lab 8</a>
-    <a href="../LAB 9/index.html">Lab 9</a>
-    <a href="../LAB 10/index.html">Lab 10</a>
-</nav>
-
-<main>
-    <h2>Lab 2: Multivariate Visualization with D3</h2>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+    </nav>
 
     <p>
-        This visualization explores the relationship among
-        study hours, exam score, major, and year level.
+        Two mappings of the same four variables &mdash; population (ratio),
+        temp_c (interval), development_level (ordinal), region (nominal).
+        Hover a point to identify the city.
     </p>
 
-    <div id="chart"></div>
-    <div id="tooltip" class="tooltip"></div>
-</main>
+    <div class="viz-row">
 
-<script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-<script src="lab2.js"></script>
+        <div class="viz-col">
+            <h2>Visualization 1</h2>
+            <div id="chart1"></div>
+
+            <h3>Design Justification</h3>
+            <p class="justification">
+                I mapped <strong>population</strong> and <strong>temp_c</strong> to the
+                x- and y-axes because both are quantitative variables, and position on a
+                common scale is the visual channel humans read most accurately &mdash; it
+                lets viewers compare exact magnitudes and spot correlation (or the lack of
+                one) between population and temperature at a glance. <strong>Region</strong>
+                is nominal with no inherent order, so I used <strong>color</strong>, a
+                channel with no implied ranking, to group cities categorically.
+                <strong>Development_level</strong> is ordinal, so I encoded it as
+                <strong>size</strong>, a channel that has a natural sense of "more/less,"
+                matching Low &lt; Medium &lt; High. Together, this lets a viewer ask: are
+                larger (more developed) cities clustered by region, and does population or
+                temperature relate to development level? Color groups regions and size
+                signals development tier without needing to check the legend for every
+                point.
+            </p>
+        </div>
+
+        <div class="viz-col">
+            <h2>Visualization 2</h2>
+            <div id="chart2"></div>
+
+            <h3>Design Justification</h3>
+            <p class="justification">
+                This version swaps the axes (temp_c on x, population on y) to see whether
+                the same data reads differently when temperature leads the comparison.
+                <strong>Development_level</strong>, being ordinal, is now mapped to
+                <strong>color</strong> using a light-to-dark sequential ramp (Low = light,
+                High = dark) so its order stays visible even though color is usually
+                reserved for nominal data &mdash; a sequential palette preserves the
+                "more/less" meaning. <strong>Region</strong>, being nominal, is mapped to
+                <strong>shape</strong> (circle, square, triangle, diamond) since shape
+                carries no ranking, matching region's lack of order. I expect viewers to
+                notice whether darker (more developed) points cluster at particular
+                temperatures, and whether one shape (region) dominates a corner of the
+                plot &mdash; here, development level's gradient is the first thing the eye
+                organizes by.
+            </p>
+        </div>
+
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab2.js"></script>
 
 </body>
+
 </html>

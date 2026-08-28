@@ -60,6 +60,18 @@ p {
     fill: #333;
 }
 
+.viz-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 40px;
+    text-align: left;
+}
+
+.viz-col {
+    max-width: 460px;
+}
+
 .tooltip {
     position: absolute;
     background: white;

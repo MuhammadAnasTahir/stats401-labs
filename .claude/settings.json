@@ -4,7 +4,8 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/LAB%201/lab1.js\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/css/style.css\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/data/students.csv\")",
-      "Bash(node --check \"LAB 2/lab2.js\")"
+      "Bash(node --check \"LAB 2/lab2.js\")",
+      "Bash(node --check \"LAB 3/lab3.js\")"
     ]
   }
 }
