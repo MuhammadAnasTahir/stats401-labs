@@ -1,6 +1,7 @@
-const width = 460;
+const width = 330;
 const height = 380;
-const margin = { top: 30, right: 120, bottom: 50, left: 60 };
+const margin = { top: 30, right: 20, bottom: 50, left: 55 };
+const legendPanelWidth = 130;
 
 const tooltip = d3.select("#tooltip");
 
@@ -74,7 +75,18 @@ function renderChart1(data, regions, devLevels) {
     const sizeScale = d3.scaleOrdinal().domain(devLevels).range([6, 10, 14]);
     const colorScale = d3.scaleOrdinal().domain(regions).range(d3.schemeSet2);
 
-    const svg = d3.select("#chart1").append("svg").attr("width", width).attr("height", height);
+    const wrap = d3.select("#chart1").append("div").attr("class", "chart1-wrap");
+
+    const legendSvg = wrap.append("svg").attr("class", "legend-panel")
+        .attr("width", legendPanelWidth).attr("height", height);
+
+    addLegend(legendSvg, 18, margin.top, "Region", regions,
+        g => g.append("circle").attr("r", 6).attr("fill", d => colorScale(d)));
+
+    addLegend(legendSvg, 18, margin.top + regions.length * legendItemHeight + legendGroupGap, "Development", devLevels,
+        g => g.append("circle").attr("r", d => sizeScale(d)).attr("fill", "#999"));
+
+    const svg = wrap.append("svg").attr("width", width).attr("height", height);
     addAxes(svg, xScale, yScale, "Population (millions)", "Temperature (°C)");
 
     svg.selectAll("circle").data(data).join("circle")
@@ -86,12 +98,6 @@ function renderChart1(data, regions, devLevels) {
         .on("mouseover", showTooltip)
         .on("mousemove", moveTooltip)
         .on("mouseout", hideTooltip);
-
-    addLegend(svg, width - margin.right + 20, margin.top, "Region", regions,
-        g => g.append("circle").attr("r", 6).attr("fill", d => colorScale(d)));
-
-    addLegend(svg, width - margin.right + 20, margin.top + regions.length * legendItemHeight + legendGroupGap, "Development", devLevels,
-        g => g.append("circle").attr("r", d => sizeScale(d)).attr("fill", "#999"));
 }
 
 // Visualization 2: development_level -> x, population -> bar height, temp_c -> color, region -> facet (grouping)

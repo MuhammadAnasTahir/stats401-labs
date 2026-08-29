@@ -72,6 +72,17 @@ p {
     max-width: 460px;
 }
 
+.chart1-wrap {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.legend-panel {
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
 #chart2 {
     display: flex;
     flex-wrap: wrap;
