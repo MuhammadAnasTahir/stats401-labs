@@ -40,13 +40,16 @@ function addAxes(svg, xScale, yScale, xLabel, yLabel) {
         .text(yLabel);
 }
 
+const legendItemHeight = 32;
+const legendGroupGap = 55;
+
 function addLegend(svg, x, y, title, items, drawSymbol) {
     const legend = svg.append("g").attr("transform", `translate(${x}, ${y})`);
-    legend.append("text").attr("y", -8).attr("font-weight", "bold").text(title);
+    legend.append("text").attr("y", -10).attr("font-weight", "bold").text(title);
     const g = legend.selectAll("g").data(items).join("g")
-        .attr("transform", (d, i) => `translate(0, ${i * 20})`);
+        .attr("transform", (d, i) => `translate(0, ${i * legendItemHeight})`);
     drawSymbol(g);
-    g.append("text").attr("x", 14).attr("y", 4).text(d => d);
+    g.append("text").attr("x", 16).attr("y", 4).text(d => d);
 }
 
 d3.csv("../data/cities_multivariate.csv", d => ({
@@ -87,38 +90,91 @@ function renderChart1(data, regions, devLevels) {
     addLegend(svg, width - margin.right + 20, margin.top, "Region", regions,
         g => g.append("circle").attr("r", 6).attr("fill", d => colorScale(d)));
 
-    addLegend(svg, width - margin.right + 20, margin.top + regions.length * 20 + 30, "Development", devLevels,
+    addLegend(svg, width - margin.right + 20, margin.top + regions.length * legendItemHeight + legendGroupGap, "Development", devLevels,
         g => g.append("circle").attr("r", d => sizeScale(d)).attr("fill", "#999"));
 }
 
-// Visualization 2: temp_c -> x, population -> y, development_level -> color, region -> shape
+// Visualization 2: development_level -> x, population -> bar height, temp_c -> color, region -> facet (grouping)
 function renderChart2(data, regions, devLevels) {
-    const xScale = d3.scaleLinear().domain(d3.extent(data, d => d.temp_c)).nice()
-        .range([margin.left, width - margin.right]);
-    const yScale = d3.scaleLinear().domain(d3.extent(data, d => d.population)).nice()
-        .range([height - margin.bottom, margin.top]);
-    const colorScale = d3.scaleOrdinal().domain(devLevels).range(["#c6dbef", "#4292c6", "#08306b"]);
-    const shapeScale = d3.scaleOrdinal().domain(regions)
-        .range([d3.symbolCircle, d3.symbolSquare, d3.symbolTriangle, d3.symbolDiamond]);
-    const symbol = d3.symbol().size(100);
+    const facetWidth = 205;
+    const facetHeight = 175;
+    const fMargin = { top: 10, right: 8, bottom: 34, left: 42 };
 
-    const svg = d3.select("#chart2").append("svg").attr("width", width).attr("height", height);
-    addAxes(svg, xScale, yScale, "Temperature (°C)", "Population (millions)");
+    const yScale = d3.scaleLinear().domain([0, d3.max(data, d => d.population)]).nice()
+        .range([facetHeight - fMargin.bottom, fMargin.top]);
+    const x0 = d3.scaleBand().domain(devLevels)
+        .range([fMargin.left, facetWidth - fMargin.right]).padding(0.3);
+    const tempScale = d3.scaleSequential(d3.interpolateYlOrRd).domain(d3.extent(data, d => d.temp_c));
 
-    svg.selectAll("path.point").data(data).join("path")
-        .attr("class", "point")
-        .attr("d", d => symbol.type(shapeScale(d.region))())
-        .attr("transform", d => `translate(${xScale(d.temp_c)}, ${yScale(d.population)})`)
-        .attr("fill", d => colorScale(d.development_level))
-        .attr("stroke", "#333")
-        .on("mouseover", showTooltip)
-        .on("mousemove", moveTooltip)
-        .on("mouseout", hideTooltip);
+    const container = d3.select("#chart2");
 
-    addLegend(svg, width - margin.right + 20, margin.top, "Development", devLevels,
-        g => g.append("circle").attr("r", 6).attr("fill", d => colorScale(d)));
+    regions.forEach(region => {
+        const cities = data.filter(d => d.region === region);
 
-    addLegend(svg, width - margin.right + 20, margin.top + devLevels.length * 20 + 30, "Region", regions,
-        g => g.append("path").attr("transform", "translate(6,0)")
-            .attr("d", d => symbol.type(shapeScale(d))()).attr("fill", "#999"));
+        const facet = container.append("div").attr("class", "facet");
+        facet.append("div").attr("class", "facet-title").text(region);
+
+        const svg = facet.append("svg").attr("width", facetWidth).attr("height", facetHeight);
+
+        svg.append("g")
+            .attr("transform", `translate(0, ${facetHeight - fMargin.bottom})`)
+            .call(d3.axisBottom(x0));
+        svg.append("g")
+            .attr("transform", `translate(${fMargin.left}, 0)`)
+            .call(d3.axisLeft(yScale).ticks(4));
+
+        svg.append("text")
+            .attr("class", "facet-axis-label")
+            .attr("x", (fMargin.left + facetWidth - fMargin.right) / 2)
+            .attr("y", facetHeight - 4)
+            .attr("text-anchor", "middle")
+            .text("Development Level");
+
+        svg.append("text")
+            .attr("class", "facet-axis-label")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -facetHeight / 2)
+            .attr("y", 11)
+            .attr("text-anchor", "middle")
+            .text("Population (M)");
+
+        devLevels.forEach(level => {
+            const group = cities.filter(d => d.development_level === level);
+            const x1 = d3.scaleBand().domain(group.map(d => d.city))
+                .range([x0(level), x0(level) + x0.bandwidth()]).padding(0.15);
+
+            svg.selectAll(null).data(group).join("rect")
+                .attr("x", d => x1(d.city))
+                .attr("y", d => yScale(d.population))
+                .attr("width", x1.bandwidth())
+                .attr("height", d => yScale(0) - yScale(d.population))
+                .attr("fill", d => tempScale(d.temp_c))
+                .attr("stroke", "#333")
+                .attr("stroke-width", 0.5)
+                .on("mouseover", showTooltip)
+                .on("mousemove", moveTooltip)
+                .on("mouseout", hideTooltip);
+        });
+    });
+
+    addGradientLegend(container, tempScale);
+}
+
+function addGradientLegend(container, colorScale) {
+    const w = 160;
+    const h = 14;
+    const [min, max] = colorScale.domain();
+
+    const wrap = container.append("div").attr("class", "gradient-legend");
+    wrap.append("div").attr("class", "legend-title").text("Temperature (°C)");
+
+    const svg = wrap.append("svg").attr("width", w).attr("height", h + 16);
+    const gradient = svg.append("defs").append("linearGradient").attr("id", "temp-gradient");
+    d3.range(0, 1.01, 0.1).forEach(t => {
+        gradient.append("stop").attr("offset", `${t * 100}%`).attr("stop-color", colorScale(min + t * (max - min)));
+    });
+
+    svg.append("rect").attr("width", w).attr("height", h).attr("fill", "url(#temp-gradient)");
+    svg.append("text").attr("x", 0).attr("y", h + 14).text(min.toFixed(1));
+    svg.append("text").attr("x", w).attr("y", h + 14).attr("text-anchor", "end").text(max.toFixed(1));
 }

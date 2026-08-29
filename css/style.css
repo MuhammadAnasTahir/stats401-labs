@@ -72,6 +72,35 @@ p {
     max-width: 460px;
 }
 
+#chart2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.facet-title {
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.facet-axis-label {
+    font-size: 9px;
+    fill: #555;
+}
+
+.gradient-legend {
+    width: 100%;
+    text-align: center;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.legend-title {
+    margin-bottom: 2px;
+}
+
 .tooltip {
     position: absolute;
     background: white;

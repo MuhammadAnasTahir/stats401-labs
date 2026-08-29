@@ -11,7 +11,7 @@
 
 <body>
 
-    <h1>Lab 2: Four-Dimensional Visualization</h1>
+    <h1>Lab 2: Multivariate Visualization with D3</h1>
 
     <nav class="lab-nav">
         <a href="../index.html">Home</a>
@@ -30,7 +30,7 @@
     <p>
         Two mappings of the same four variables &mdash; population (ratio),
         temp_c (interval), development_level (ordinal), region (nominal).
-        Hover a point to identify the city.
+        Hover a point or bar to identify the city.
     </p>
 
     <div class="viz-row">
@@ -41,20 +41,22 @@
 
             <h3>Design Justification</h3>
             <p class="justification">
-                I mapped <strong>population</strong> and <strong>temp_c</strong> to the
-                x- and y-axes because both are quantitative variables, and position on a
-                common scale is the visual channel humans read most accurately &mdash; it
-                lets viewers compare exact magnitudes and spot correlation (or the lack of
-                one) between population and temperature at a glance. <strong>Region</strong>
-                is nominal with no inherent order, so I used <strong>color</strong>, a
+                I mapped population and temperature to the x- and y-axes because both are
+                quantitative variables, and position on a common scale which helps viewers
+                compare exact magnitudes and spot correlation between population and
+                temperature. Region is nominal with no inherent order, so I used color, a
                 channel with no implied ranking, to group cities categorically.
-                <strong>Development_level</strong> is ordinal, so I encoded it as
-                <strong>size</strong>, a channel that has a natural sense of "more/less,"
-                matching Low &lt; Medium &lt; High. Together, this lets a viewer ask: are
-                larger (more developed) cities clustered by region, and does population or
-                temperature relate to development level? Color groups regions and size
-                signals development tier without needing to check the legend for every
-                point.
+                Development level is ordinal, so I encoded it as size, which gives a
+                natural sense of more/less. Size and color are also easy to distinguish at
+                a glance in a dataset this small, since there are only three development
+                levels and four regions to track, so the encoding stays readable without
+                becoming cluttered.
+            </p>
+            <p class="justification">
+                Together, this lets a viewer ask questions like are larger, more developed
+                cities clustered by region or and does population or temperature relate to
+                development level? Color groups regions and size signals development tier
+                without needing to check the legend for every point.
             </p>
         </div>
 
@@ -64,19 +66,26 @@
 
             <h3>Design Justification</h3>
             <p class="justification">
-                This version swaps the axes (temp_c on x, population on y) to see whether
-                the same data reads differently when temperature leads the comparison.
-                <strong>Development_level</strong>, being ordinal, is now mapped to
-                <strong>color</strong> using a light-to-dark sequential ramp (Low = light,
-                High = dark) so its order stays visible even though color is usually
-                reserved for nominal data &mdash; a sequential palette preserves the
-                "more/less" meaning. <strong>Region</strong>, being nominal, is mapped to
-                <strong>shape</strong> (circle, square, triangle, diamond) since shape
-                carries no ranking, matching region's lack of order. I expect viewers to
-                notice whether darker (more developed) points cluster at particular
-                temperatures, and whether one shape (region) dominates a corner of the
-                plot &mdash; here, development level's gradient is the first thing the eye
-                organizes by.
+                For this version I have a grouped bar chart, split into one small panel
+                per region. Development level sits on the x-axis because it is ordinal,
+                so its Low/Medium/High order is preserved directly by the layout.
+                Population, which is a ratio variable drives bar height since length is
+                the visual channel people read most accurately for quantities.
+                Temperature, an interval variable, is encoded as a sequential color ramp
+                from light to dark, which suits continuous data well.
+            </p>
+            <p class="justification">
+                Splitting the chart into one panel per region uses grouping instead of a
+                position or shape channel, which keeps region comparisons simple. Thus, a
+                viewer can scan one panel to see how population and temperature vary
+                across development levels within that region, or compare panels to see
+                whether, for example, northern cities tend to be more developed than
+                southern ones.
+            </p>
+            <p class="justification">
+                I expect viewers to notice that bar height and color don't always move
+                together, suggesting population, temperature, and development level are
+                fairly independent of each other.
             </p>
         </div>
 
