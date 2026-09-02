@@ -1,26 +1,94 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Lab 3</title>
-
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Lab 3 - Web Data Acquisition</title>
 </head>
 
 <body>
 
-    <h1>Lab 3</h1>
+    <h1>Lab 3: Web Data Acquisition with Python</h1>
 
-    <p>
-        Lab 3 will be added here.
-    </p>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+    </nav>
 
-    <a href="../index.html">
-        Back to home
-    </a>
+    <div class="dataset-section">
+
+        <h2>Dataset: Global Earthquakes (Last 2 Months)</h2>
+        <p>
+            <strong>Source:</strong> USGS Earthquake Hazards Program API
+            (earthquake.usgs.gov/fdsnws/event/1/query). A public API intended
+            which is suitable for this kind of programmatic access.<br>
+            <strong>Method:</strong> API requests with Python, paginated with limit/offset and saved to CSV with pandas.<br>
+            <strong>Records collected:</strong> 1,500<br>
+            
+        </p>
+
+        <div class="filters">
+            <label>Min Magnitude
+                <input type="number" step="0.1" id="filter-mag-min" class="filter-control">
+            </label>
+            <label>Max Magnitude
+                <input type="number" step="0.1" id="filter-mag-max" class="filter-control">
+            </label>
+            <label>Min Depth (km)
+                <input type="number" step="1" id="filter-depth-min" class="filter-control">
+            </label>
+            <label>Max Depth (km)
+                <input type="number" step="1" id="filter-depth-max" class="filter-control">
+            </label>
+            <label>Type
+                <select id="filter-type" class="filter-control">
+                    <option value="all">All</option>
+                </select>
+            </label>
+            <label>Status
+                <select id="filter-status" class="filter-control">
+                    <option value="all">All</option>
+                </select>
+            </label>
+        </div>
+
+        <p id="record-count"></p>
+
+        <div class="table-container">
+            <table id="data-table">
+                <thead>
+                    <tr>
+                        <th data-col="id">ID</th>
+                        <th data-col="time">Time</th>
+                        <th data-col="place">Place</th>
+                        <th data-col="magnitude">Magnitude</th>
+                        <th data-col="latitude">Latitude</th>
+                        <th data-col="longitude">Longitude</th>
+                        <th data-col="depth">Depth (km)</th>
+                        <th data-col="type">Type</th>
+                        <th data-col="status">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body"></tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab3.js"></script>
 
 </body>
 

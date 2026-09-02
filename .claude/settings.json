@@ -5,7 +5,9 @@
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/css/style.css\")",
       "Bash(curl -s -o /dev/null -w \"%{http_code}\\\\n\" \"https://muhammadanastahir.github.io/stats401-labs/data/students.csv\")",
       "Bash(node --check \"LAB 2/lab2.js\")",
-      "Bash(node --check \"LAB 3/lab3.js\")"
+      "Bash(node --check \"LAB 3/lab3.js\")",
+      "Bash(python -c \"import requests, bs4; print\\('requests', requests.__version__\\); print\\('bs4', bs4.__version__\\)\")",
+      "Bash(python -c ' *)"
     ]
   }
 }
