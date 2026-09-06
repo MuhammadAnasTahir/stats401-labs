@@ -1,26 +1,85 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Lab 4</title>
-
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Lab 4 - Cleaning Web Data for Visualization</title>
 </head>
 
 <body>
 
-    <h1>Lab 4</h1>
+    <h1>Lab 4: Cleaning Web Data for Visualization</h1>
 
-    <p>
-        Lab 4 will be added here.
-    </p>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+    </nav>
 
-    <a href="../index.html">
-        Back to home
-    </a>
+    <div class="dataset-section">
+
+        <h2>Dataset: Twitter US Airline Sentiment</h2>
+        <p>
+            <strong>Source:</strong> Crowdflower/Figure Eight's
+            <a href="https://www.kaggle.com/crowdflower/twitter-airline-sentiment" target="_blank" rel="noopener">Twitter US Airline Sentiment dataset</a>
+            (CC0, publicly redistributable), 14,640 tweets from February 2015.<br>
+            <strong>Method:</strong> Bulk download of the public CSV, cleaned with
+            pandas, then scored with a Twitter-trained RoBERTa sentiment model
+            (<code>cardiffnlp/twitter-roberta-base-sentiment-latest</code>) run
+            locally in Python.<br>
+            <strong>Records used:</strong> 1,200 tweets, randomly sampled after
+            cleaning from the 14,427 usable raw rows.<br>
+            <strong>Cleaning performed:</strong> Dropped columns that were over 90%
+            missing (coordinates, timezone, negative-reason fields), removed 155
+            duplicate tweet IDs and 213 duplicate texts, parsed timestamps to real
+            datetimes, and stripped URLs/HTML entities from tweet text.
+        </p>
+
+        <div id="chart"></div>
+
+        <h3>Analysis</h3>
+        <p class="justification">
+            This visualization is a stacked bar chart built from 1,200 tweets
+            sampled from the Crowdflower Twitter US Airline Sentiment dataset
+            (14,640 tweets in total), collected in February 2015. After
+            downloading the raw CSV, I dropped columns that were over 90% missing
+            (tweet_coord, user_timezone, negativereason), removed 155 duplicate
+            tweet IDs and 213 duplicate tweet texts, parsed tweet_created into
+            real datetimes, and stripped URLs and HTML entities from the tweet
+            text.
+        </p>
+        <p class="justification">
+            Sentiment was estimated per tweet using cardiffnlp's Twitter-trained
+            RoBERTa model which outputs a predicted label
+            (negative/neutral/positive) with a confidence score for each class.
+            These are model estimates and they agree with the dataset's original
+            human-labeled sentiment 81.4% of the time. Each bar represents
+            one airline, and the stacked segments encode the share of tweets
+            classified as negative, neutral, or positive for that airline,
+            letting all six airlines be compared directly on a common 0-100%
+            scale. American and US Airways carry the largest negative shares of 
+            69.1% and 72.2% respectively, United follows at 63.5%, while Virgin America
+            stands out with a far more balanced mix of 33.3% negative, 35.6%
+            neutral, 31.1% positive.
+        </p>
+
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab4.js"></script>
 
 </body>
 
