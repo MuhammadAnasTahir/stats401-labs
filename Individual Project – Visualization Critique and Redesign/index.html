@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/redesign.css?v=5">
+    <link rel="stylesheet" href="css/report.css?v=2">
+    <title>Visualization Critique and Redesign</title>
+</head>
+
+<body>
+
+    <h1>Individual Project &ndash; Visualization Critique and Redesign</h1>
+
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+        <a href="index.html">Visualization Critique and Redesign</a>
+    </nav>
+
+    <div class="report-toolbar">
+        <a href="report.html" class="report-btn">Click Here to See the Report</a>
+    </div>
+
+    <!-- 1. Original visualization -->
+    <h2>The Original Visualization : Finviz S&amp;P 500 Map</h2>
+
+    <div class="intro">
+        <p>
+            The <a href="https://finviz.com/map" target="_blank">Finviz S&amp;P 500 Map</a>
+            is a treemap of every company in the S&amp;P 500. Each company is a tile:
+            tile <b>size</b> encodes market capitalization, tile <b>color</b> encodes the
+            daily percent change in stock price (green up, red down), and tiles are grouped
+            by sector and industry. It gives traders a dense, at-a-glance picture of how the
+            market moved on a given day, but the day's most important number, percent
+            change, is carried only by color, while the eye is drawn to tile size. The
+            screenshot below was captured on September 24, 2026.
+        </p>
+    </div>
+
+    <figure class="original-figure">
+        <img src="images/finviz_map.webp"
+             alt="Screenshot of the Finviz S&amp;P 500 Map: a treemap of company tiles sized by market cap and colored red to green by daily percent change">
+        <figcaption class="figure-caption">
+            <div class="cap-title">Figure 1: Finviz S&amp;P 500 Map.</div>
+            <div>Source: <a href="https://finviz.com/map" target="_blank">https://finviz.com/map</a> (screenshot, September 24th, 2026)</div>
+        </figcaption>
+    </figure>
+
+    <!-- 2. Redesign -->
+    <h2>Visualization Redesign</h2>
+
+    <div class="intro">
+        <p>
+            The redesign keeps market capitalization on treemap area, which is the right
+            channel for a value that spans trillions of dollars. Each company's
+            <b>daily percent change</b> moves onto bar length and position measured from a
+            zero line, which is a far more precise channel for reading and ranking a signed
+            value. The treemap and the sector bar chart are linked. Hovering a sector in one
+            highlights it in the other, and clicking a sector drills both views down to that
+            sector's individual companies, with a breadcrumb back to the full market. A
+            colorblind-safe palette swaps the usual red/green scheme for blue/orange, so sign
+            is never carried by color alone. Bar direction and a signed percent label always
+            confirm it. The data is a single-day snapshot of the S&amp;P 500 retrieved
+            <b>September 24, 2026</b> combining Nasdaq market data with GICS sector
+            classifications for 498 companies (2 of the S&amp;P 500's 500 constituents are
+            missing from our dataset). See Data Sources and References below.
+        </p>
+        <p>
+            Two controls sit above the visualizations. The <b>sector average</b> toggle
+            switches between cap-weighted and equal-weighted daily change. Cap-weighted gives
+            each company influence proportional to its market capitalization, which is how the
+            S&amp;P 500 index itself is calculated, so it shows what actually moved the index.
+            Equal-weighted treats every company the same regardless of size, revealing whether
+            a sector's move is broad-based or driven by just a few giants. Comparing the two is
+            often the most telling part of the story. A sector can look flat on a cap-weighted
+            basis while most of its individual stocks moved sharply in one direction. The
+            <b>color scheme</b> toggle switches between the default red/green palette and the
+            colorblind-safe blue/orange palette described above.
+        </p>
+    </div>
+
+    <div id="viz-app" class="viz-app">
+
+        <div class="breadth">
+            <div class="breadth-bar" id="breadth-bar"></div>
+            <div class="index-move" id="index-move"></div>
+            <div class="breadth-text" id="breadth-text"></div>
+        </div>
+
+        <div class="crumb" id="crumb"></div>
+
+        <div class="controls-row">
+            <div class="control-group">
+                <span class="control-label">Sector Average</span>
+                <span class="seg" id="weight-toggle">
+                    <button data-value="cap" class="active">Cap-Weighted</button>
+                    <button data-value="equal">Equal-Weighted</button>
+                </span>
+            </div>
+            <div class="control-group">
+                <span class="control-label">Color Scheme</span>
+                <span class="seg palette-seg" id="palette-toggle">
+                    <button data-value="finance" class="active">Red / Green</button>
+                    <button data-value="colorblind">Orange / Blue (Colorblind-Safe)</button>
+                </span>
+            </div>
+        </div>
+
+        <div class="panels">
+            <div class="panel bordered">
+                <h4 id="treemap-title">Market Cap by Sector</h4>
+                <div class="hint" id="treemap-hint">Tile Area = Market Cap</div>
+                <div id="treemap"></div>
+                <figcaption class="figure-caption">
+                    <div class="cap-title">Figure 2: Market Cap by Sector</div>
+                </figcaption>
+            </div>
+            <div class="panel">
+                <h4 id="bars-title"></h4>
+                <div class="hint" id="bars-hint">Bar Length = Percentage Changed</div>
+                <div id="bars-axis"></div>
+                <div class="bars-body" id="bars-body"></div>
+                <figcaption class="figure-caption">
+                    <div class="cap-title">Figure 3: Ranked Sector Change</div>
+                </figcaption>
+            </div>
+        </div>
+
+        <div class="legend">
+            <p class="legend-text">
+                Tile color shows the size of the daily change on a continuous scale. Bar color
+                only marks up or down and reads the exact value from bar length and label.
+            </p>
+            <svg id="legend-svg"></svg>
+        </div>
+
+        <div class="compare">
+            <h3>Compare Any Companies</h3>
+            <div class="compare-lead">
+                All selected companies share one axis and are sorted by daily change.
+                Market cap is shown as text on the right.
+            </div>
+            <div class="picker">
+                <select id="compare-select">
+                    <option value="">+ Add a company&hellip;</option>
+                </select>
+            </div>
+            <div class="chips" id="compare-chips"></div>
+            <p class="viz-sub" id="compare-empty" style="display:none">No companies selected.</p>
+            <div id="compare-axis"></div>
+            <div class="bars-body no-scroll" id="compare-body"></div>
+        </div>
+    </div>
+
+    <!-- 3. References -->
+    <h2 class="refs-heading">Data Sources and References</h2>
+
+    <ol class="refs">
+        <li>Finviz. <i>S&amp;P 500 Map</i>. <a href="https://finviz.com/map" target="_blank">finviz.com/map</a></li>
+        <li>Harley, K., and Kaley, A. (2019). <i>Treemaps: Data Visualization of Complex Hierarchies</i>. Nielsen Norman Group.
+            <a href="https://www.nngroup.com/articles/treemaps/" target="_blank">nngroup.com/articles/treemaps</a></li>
+        <li>Nasdaq. Stock Screener market data (market cap, price, daily change). Accessed 24 Sept. 2026 via
+            <a href="https://github.com/zyhe16/top-us-stock-tickers" target="_blank">github.com/zyhe16/top-us-stock-tickers</a> (MIT-licensed mirror).</li>
+        <li>Wikipedia contributors. <i>List of S&amp;P 500 companies</i> (GICS sectors). Accessed 24 Sept. 2026 via the
+            <a href="https://github.com/datasets/s-and-p-500-companies" target="_blank">datahub package</a> (ODC PDDL).</li>
+        <li>Redesign data file: <a href="data/sp500_snapshot.json">sp500_snapshot.json</a>, built by
+            <a href="data/generate_data.py">generate_data.py</a> from sources 3&ndash;4 above. Built with
+            <a href="https://d3js.org" target="_blank">D3.js v7</a>.</li>
+    </ol>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/color.js?v=4"></script>
+    <script src="js/bars.js?v=3"></script>
+    <script src="js/treemap.js?v=3"></script>
+    <script src="js/compare.js?v=3"></script>
+    <script src="js/main.js?v=4"></script>
+</body>
+
+</html>

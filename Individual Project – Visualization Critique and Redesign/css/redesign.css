@@ -1,0 +1,382 @@
+/* Styles for the Visualization Critique and Redesign page.
+   Site-wide look comes from ../css/style.css; this file only adds the redesign. */
+
+/* Shared reading column: the intro text, the original figure, the redesign
+   app, and the references all line up on this same left/right edge. */
+:root {
+    --col-width: 920px;
+}
+
+.intro {
+    max-width: var(--col-width);
+    margin: 0 auto;
+    text-align: left;
+}
+
+.original-figure {
+    max-width: var(--col-width);
+    margin: 24px auto;
+}
+
+.original-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid #ddd;
+}
+
+.figure-caption {
+    font-size: 13px;
+    color: #555;
+    text-align: center;
+    margin-top: 8px;
+    line-height: 1.6;
+}
+
+
+/* ---------- Redesign app ---------- */
+
+.viz-app {
+    text-align: left;
+    max-width: var(--col-width);
+    margin: 20px auto 0;
+    font-size: 14px;
+    color: #222;
+}
+
+.viz-sub {
+    color: #666;
+    font-size: 13px;
+}
+
+/* Sector-average and color-scheme toggles, centered above the two
+   visualizations so they read as controls for both at once. */
+.controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 28px;
+    margin: 22px 0 20px;
+    padding: 14px 0;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ddd;
+}
+
+.control-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.control-label {
+    font-size: 13px;
+    font-weight: bold;
+    color: #444;
+}
+
+.seg {
+    display: inline-flex;
+    border: 1px solid #999;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.seg button {
+    font: inherit;
+    font-size: 13px;
+    padding: 7px 14px;
+    border: none;
+    background: #f1f1f1;
+    color: #333;
+    cursor: pointer;
+}
+
+.seg button + button {
+    border-left: 1px solid #999;
+}
+
+.seg button.active {
+    background: #333;
+    color: #fff;
+}
+
+/* Palette toggle: the active button is tinted with the palette it turns on,
+   so the control itself previews the choice instead of a flat black/white. */
+.palette-seg button[data-value="finance"].active {
+    background: linear-gradient(90deg, #b03a2e, #1e7d46);
+    color: #fff;
+}
+
+.palette-seg button[data-value="colorblind"].active {
+    background: linear-gradient(90deg, #d95f02, #2166ac);
+    color: #fff;
+}
+
+/* breadth summary */
+.breadth {
+    margin-top: 14px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 6px 20px;
+    align-items: center;
+}
+
+.breadth-bar {
+    display: flex;
+    height: 20px;
+    border-radius: 3px;
+    overflow: hidden;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.breadth-bar div {
+    display: flex;
+    align-items: center;
+    padding: 0 6px;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.breadth-text,
+.index-move {
+    font-size: 13px;
+    color: #444;
+}
+
+.legend {
+    max-width: 460px;
+    margin: 28px auto 0;
+    text-align: center;
+}
+
+.legend-text {
+    margin: 0;
+    font-size: 12px;
+    color: #555;
+    line-height: 1.5;
+}
+
+/* A fixed width, centered independently of the text above it, so the bar's
+   true center always lines up with the paragraph's center regardless of how
+   the text happens to wrap. (#id beats the generic ".viz-app svg" rule.) */
+#legend-svg {
+    display: block;
+    width: 320px !important;
+    max-width: 100%;
+    height: auto;
+    margin: 10px auto 0;
+}
+
+/* linked views: side by side, so hovering or drilling into one is easy
+   to read against the other */
+.panels {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 16px;
+    align-items: stretch;
+}
+
+/* Grid items stretch to the same row height by default; pinning each
+   panel's caption to the bottom of that shared height keeps Figure 2 and
+   Figure 3 lined up even when the treemap and the bar chart are different
+   heights. */
+.panel {
+    display: flex;
+    flex-direction: column;
+}
+
+.panel .figure-caption {
+    margin-top: auto;
+    padding-top: 14px;
+}
+
+.panel h4 {
+    margin: 0 0 4px;
+    font-size: 18px;
+    text-align: center;
+    color: #111;
+}
+
+.panel .hint {
+    font-size: 13px;
+    font-weight: bold;
+    color: #555;
+    text-align: center;
+    margin-bottom: 10px;
+    min-height: 16px;
+}
+
+.panel.bordered #treemap {
+    border: 1px solid #999;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.crumb {
+    font-size: 13px;
+    margin: 14px 0 0;
+}
+
+.crumb a {
+    color: #1a5fb4;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.bars-body {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.bars-body.no-scroll {
+    max-height: none;
+    overflow: visible;
+}
+
+.viz-app svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    font-family: Arial, sans-serif;
+}
+
+.tile rect,
+.row .hit,
+.header-strip {
+    cursor: pointer;
+}
+
+.tile text,
+.row text {
+    pointer-events: none;
+}
+
+.axis text {
+    font-size: 11px;
+    fill: #555;
+}
+
+.axis path,
+.axis line {
+    stroke: #bbb;
+}
+
+.zero-line {
+    stroke: #333;
+    stroke-width: 1.2;
+}
+
+/* compare panel */
+.compare {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid #ddd;
+}
+
+.compare h3 {
+    margin: 0 0 6px;
+    font-size: 18px;
+}
+
+.compare-lead {
+    font-size: 14px;
+    color: #333;
+    line-height: 1.6;
+    max-width: 640px;
+}
+
+.picker {
+    max-width: 420px;
+    margin: 14px 0 8px;
+}
+
+.picker select {
+    width: 100%;
+    box-sizing: border-box;
+    font: inherit;
+    font-size: 13px;
+    padding: 8px 10px;
+    border: 1px solid #999;
+    border-radius: 5px;
+    background: #fff;
+    color: #333;
+    cursor: pointer;
+}
+
+.chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 10px;
+}
+
+.chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #f1f1f1;
+    border: 1px solid #ddd;
+    border-radius: 14px;
+    padding: 3px 4px 3px 10px;
+    font-size: 12px;
+}
+
+.chip button {
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+    color: #666;
+    padding: 0 4px;
+}
+
+.chip button:hover {
+    color: #000;
+}
+
+#compare-axis,
+#compare-body {
+    max-width: 620px;
+}
+
+/* tooltip */
+.tooltip {
+    position: fixed;
+    z-index: 10;
+    pointer-events: none;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 12px;
+    line-height: 1.5;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    text-align: left;
+    opacity: 0;
+    max-width: 260px;
+}
+
+.refs-heading {
+    margin-top: 70px;
+}
+
+.refs {
+    text-align: left;
+    display: inline-block;
+    max-width: var(--col-width);
+    line-height: 1.7;
+}
+
+.refs li {
+    margin-bottom: 6px;
+}
+
+@media (max-width: 800px) {
+    .panels {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="css/redesign.css?v=5">
+    <link rel="stylesheet" href="css/report.css?v=2">
+    <title>Visualization Critique and Redesign Report</title>
+</head>
+
+<body>
+
+    <h1>Visualization Critique and Redesign Report</h1>
+
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+        <a href="index.html">Visualization Critique and Redesign</a>
+    </nav>
+
+    <div class="report-toolbar">
+        <a href="index.html" class="report-btn secondary">&larr; Back to the Visualization</a>
+        <a href="https://duke.box.com/s/jelrm43y0qp7unk66un3c7e39e1jp7qf" target="_blank" rel="noopener" class="report-btn">
+            Click Here to Download the PDF of the Report
+        </a>
+    </div>
+
+    <div class="report">
+
+        <h2>Original Visualization and Context</h2>
+        <p>
+            This project critiques the <a href="https://finviz.com/map" target="_blank">Finviz S&amp;P 500 Map</a>,
+            a treemap on finviz.com that displays every company in the S&amp;P 500 index. Each company appears as
+            a tile grouped by sector and industry. Tile size encodes market capitalization, and tile color encodes
+            the day's percent change in stock price, green for gains and red for losses. The map updates
+            throughout each trading day from live market data; the screenshot in this report was captured on
+            September 24, 2026 (Finviz, n.d.).
+        </p>
+        <p>
+            The intended message is to summarize how the market performed on a given day, across the index as a
+            whole and within each sector, drawing attention to which sectors led gains or losses and which
+            companies moved the most. The intended audience is active traders and casual market watchers who want
+            a fast visual read of the day's action rather than a table of numbers. The main tasks it supports are
+            scanning for the biggest movers, comparing sectors at a glance, and forming a quick sense of overall
+            market sentiment.
+        </p>
+
+        <figure class="original-figure report-figure">
+            <img src="images/finviz_map.webp"
+                 alt="Screenshot of the Finviz S&amp;P 500 Map: a treemap of company tiles sized by market cap and colored red to green by daily percent change">
+            <figcaption class="figure-caption">
+                <div class="cap-title">Figure 1: Finviz S&amp;P 500 Map.</div>
+                <div>Source: <a href="https://finviz.com/map" target="_blank">https://finviz.com/map</a> (screenshot, September 24th, 2026)</div>
+            </figcaption>
+        </figure>
+
+        <h2>Critique</h2>
+
+        <h3>Strengths</h3>
+        <ol class="crit-list">
+            <li>
+                <b>Density.</b> The map fits the entire index onto one screen, so a viewer can scan hundreds of
+                companies at once instead of paging through spreadsheets.
+            </li>
+            <li>
+                <b>Hierarchy.</b> Grouping tiles by sector and industry gives the layout clear structure, so a
+                viewer can find a company alongside its broader context.
+            </li>
+        </ol>
+
+        <h3>Weaknesses</h3>
+        <ol class="crit-list">
+            <li>
+                <b>Competing channels.</b> Tile size and tile color carry two different variables, market
+                capitalization and daily change, and only color carries the day's real message. Area draws the
+                eye more strongly than color (Harley &amp; Kaley, 2019), so attention lands on the biggest
+                companies rather than the biggest movers. The fix is to give change its own dedicated channel.
+            </li>
+            <li>
+                <b>Imprecise color.</b> A viewer can tell a tile is red, but not whether it fell half a percent
+                or three percent, without hovering over it, which matters for a chart built around comparing
+                performance. The fix is to pair color with a precise channel such as length, plus a text label.
+            </li>
+            <li>
+                <b>Cap-weighting distortion.</b> Because tile size is market capitalization, a handful of giant
+                companies can make the whole map look uniformly green or red even when most smaller companies
+                moved the opposite way. The fix is to also report an equal weighted view.
+            </li>
+        </ol>
+
+        <h2>Redesign Rationale</h2>
+        <p>
+            The redesign is a linked pair of views built with D3.js, live below in Figures 2 and 3: hover a
+            sector, click to drill into its companies, or switch the toggles, and both views respond.
+        </p>
+
+        <div id="viz-app" class="viz-app">
+
+            <div class="breadth">
+                <div class="breadth-bar" id="breadth-bar"></div>
+                <div class="index-move" id="index-move"></div>
+                <div class="breadth-text" id="breadth-text"></div>
+            </div>
+
+            <div class="crumb" id="crumb"></div>
+
+            <div class="controls-row">
+                <div class="control-group">
+                    <span class="control-label">Sector Average</span>
+                    <span class="seg" id="weight-toggle">
+                        <button data-value="cap" class="active">Cap-Weighted</button>
+                        <button data-value="equal">Equal-Weighted</button>
+                    </span>
+                </div>
+                <div class="control-group">
+                    <span class="control-label">Color Scheme</span>
+                    <span class="seg palette-seg" id="palette-toggle">
+                        <button data-value="finance" class="active">Red / Green</button>
+                        <button data-value="colorblind">Orange / Blue (Colorblind-Safe)</button>
+                    </span>
+                </div>
+            </div>
+
+            <div class="panels">
+                <div class="panel bordered">
+                    <h4 id="treemap-title">Market Cap by Sector</h4>
+                    <div class="hint" id="treemap-hint">Tile Area = Market Cap</div>
+                    <div id="treemap"></div>
+                    <figcaption class="figure-caption">
+                        <div class="cap-title">Figure 2: Market Cap by Sector</div>
+                    </figcaption>
+                </div>
+                <div class="panel">
+                    <h4 id="bars-title"></h4>
+                    <div class="hint" id="bars-hint">Bar Length = Percentage Changed</div>
+                    <div id="bars-axis"></div>
+                    <div class="bars-body" id="bars-body"></div>
+                    <figcaption class="figure-caption">
+                        <div class="cap-title">Figure 3: Ranked Sector Change</div>
+                    </figcaption>
+                </div>
+            </div>
+
+            <div class="legend">
+                <p class="legend-text">
+                    Tile color shows the size of the daily change on a continuous scale. Bar color
+                    only marks up or down and reads the exact value from bar length and label.
+                </p>
+                <svg id="legend-svg"></svg>
+            </div>
+
+        </div>
+
+        <p>
+            The first pair of changes fixes how change is read. Daily percent change moves off tile color and
+            onto bar length and position along a zero-centered axis. This addresses the competing channels
+            problem by giving change a precise, dedicated channel where a viewer can rank sectors and companies
+            rather than sensing direction from a color. Once change had its own channel, color no longer needed
+            to carry precise information. Every bar is recolored with a single flat green or red instead of a
+            gradient, which fixes the imprecise color problem as well. Color now marks sign only and never
+            repeats what bar length already shows.
+        </p>
+        <p>
+            The remaining two changes fix how a market-wide move is summarized. A toggle between cap-weighted and
+            equal-weighted sector averages, paired with a breadth summary of advancers and decliners, addresses
+            the cap-weighting distortion. A viewer can confirm whether a move is broad-based or driven by a
+            handful of large companies, rather than relying on one headline number. The compare panel, live in
+            Figure 4, extends that idea to individual companies. A viewer searches for any company and adds it to
+            a shared chart, so companies from different sectors sit on one axis. This supports a task the
+            original design cannot do at all, comparing specific companies directly instead of scanning the whole
+            map. It reuses the same flat colors and signed labels as the sector chart.
+        </p>
+
+        <div class="viz-app">
+            <div class="compare">
+                <h3>Compare Any Companies</h3>
+                <div class="compare-lead">
+                    All selected companies share one axis and are sorted by daily change.
+                    Market cap is shown as text on the right.
+                </div>
+                <div class="picker">
+                    <select id="compare-select">
+                        <option value="">+ Add a company&hellip;</option>
+                    </select>
+                </div>
+                <div class="chips" id="compare-chips"></div>
+                <p class="viz-sub" id="compare-empty" style="display:none">No companies selected.</p>
+                <div id="compare-axis"></div>
+                <div class="bars-body no-scroll" id="compare-body"></div>
+                <figcaption class="figure-caption">
+                    <div class="cap-title">Figure 4: Compare Any Companies Panel</div>
+                </figcaption>
+            </div>
+        </div>
+
+        <h2>Original vs. Redesign</h2>
+        <p>
+            Four changes separate the redesign from the original, each mapped to a weakness identified above.
+            Daily percent change moved from tile color to bar length and position, so a viewer reads and ranks
+            performance directly rather than judging it by a color's intensity. Bar color changed from a
+            continuous gradient to a single flat green or red, removing the redundant encoding that had two
+            channels competing for the same message. A weight toggle and breadth summary let a viewer see the
+            cap-weighted number the index reports alongside the equal-weighted number that reflects the typical
+            company, surfacing cases where the two diverge. Finally, the compare panel adds a task the original
+            visualization never supported, placing any selection of companies from different sectors on one
+            shared axis instead of hunting across the map.
+        </p>
+        <p>
+            Together these changes make ranking and precise comparison much easier. A viewer can see immediately
+            which sector moved the most and confirm whether that move was broad-based or driven by a few large
+            companies. The original only supported that by scanning for color intensity. The trade-off is
+            density. The original shows all five hundred companies on one screen, while the redesign asks a
+            viewer to drill into a sector to see individual companies.
+        </p>
+
+        <h2 class="refs-heading">Data Sources and References</h2>
+        <ol class="refs">
+            <li>Finviz. (n.d.). <i>S&amp;P 500 Map</i>. Finviz.com. <a href="https://finviz.com/map" target="_blank">finviz.com/map</a></li>
+            <li>Harley, K., &amp; Kaley, A. (2019). <i>Treemaps: Data Visualization of Complex Hierarchies</i>. Nielsen Norman Group.
+                <a href="https://www.nngroup.com/articles/treemaps/" target="_blank">nngroup.com/articles/treemaps</a></li>
+            <li>Nasdaq. Stock Screener market data (market cap, price, daily change). Accessed 24 Sept. 2026 via
+                <a href="https://github.com/zyhe16/top-us-stock-tickers" target="_blank">github.com/zyhe16/top-us-stock-tickers</a> (MIT-licensed mirror).</li>
+            <li>Wikipedia contributors. <i>List of S&amp;P 500 companies</i> (GICS sectors). Accessed 24 Sept. 2026 via the
+                <a href="https://github.com/datasets/s-and-p-500-companies" target="_blank">datahub package</a> (ODC PDDL).</li>
+            <li>Redesign data file: <a href="data/sp500_snapshot.json">sp500_snapshot.json</a>, built with
+                <a href="https://d3js.org" target="_blank">D3.js v7</a>. See the full build and code on the
+                <a href="index.html">Visualization Critique and Redesign page</a>.</li>
+        </ol>
+
+    </div>
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="js/color.js?v=4"></script>
+    <script src="js/bars.js?v=3"></script>
+    <script src="js/treemap.js?v=3"></script>
+    <script src="js/compare.js?v=3"></script>
+    <script src="js/main.js?v=4"></script>
+
+</body>
+
+</html>
