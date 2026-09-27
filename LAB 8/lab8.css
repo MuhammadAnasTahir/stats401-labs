@@ -1,0 +1,312 @@
+body.lab8-body {
+    max-width: 1400px;
+}
+
+.stat-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin: 16px 0;
+}
+
+.stat-card {
+    background: #f7f7f9;
+    border: 1px solid #e2e2e6;
+    border-radius: 8px;
+    padding: 10px 16px;
+    min-width: 130px;
+    text-align: center;
+}
+
+.stat-card .stat-value {
+    font-size: 22px;
+    font-weight: bold;
+    color: #2a5d84;
+}
+
+.stat-card .stat-label {
+    font-size: 12px;
+    color: #555;
+}
+
+.dataset-section .viz-col {
+    max-width: 620px;
+}
+
+.dataset-section .viz-col-wide {
+    max-width: none;
+    width: 100%;
+    overflow-x: auto;
+}
+
+.dataset-section .viz-row {
+    align-items: flex-start;
+    margin-bottom: 36px;
+}
+
+.dataset-section .viz-col h3 {
+    text-align: center;
+    margin: 0 0 8px 0;
+}
+
+#chart-by-chapter, #chart-tfidf, #chart-wordcount {
+    display: flex;
+    justify-content: center;
+}
+
+/* ---- Semantic topic legend: vertical list in the map sidebar ---- */
+
+#topic-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+.legend-item:hover {
+    background: #eef3f8;
+}
+
+.legend-swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+.legend-item.dimmed {
+    opacity: 0.35;
+}
+
+.legend-title {
+    font-weight: bold;
+    margin-bottom: 4px;
+}
+
+/* ---- Map layout ---- */
+
+.map-layout {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    align-items: flex-start;
+    margin-top: 14px;
+}
+
+.map-svg-wrap {
+    flex: 1 1 640px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+    background: #fcfcfd;
+}
+
+.map-sidebar {
+    flex: 0 0 340px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    text-align: left;
+}
+
+.side-box {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 13px;
+}
+
+/* Detail panel + neighbors panel are the two important, "always look here"
+   boxes -- give them a stronger visual presence than a generic side-box. */
+.important-box {
+    background: #f7fafc;
+    border: 1px solid #cddce6;
+    border-left: 5px solid #2a5d84;
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-size: 14px;
+    max-height: 420px;
+    overflow-y: auto;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.important-box .legend-title {
+    font-size: 15px;
+    color: #2a5d84;
+    margin-bottom: 8px;
+}
+
+#neighbors-panel.important-box {
+    border-left-color: #e8722c;
+}
+
+#neighbors-panel.important-box .legend-title {
+    color: #b0540f;
+}
+
+.placeholder-text {
+    color: #888;
+    font-size: 13px;
+}
+
+.detail-field {
+    margin: 5px 0;
+    line-height: 1.5;
+}
+
+.detail-field .field-label {
+    font-weight: bold;
+    color: #444;
+}
+
+.neighbor-item {
+    border-top: 1px solid #e2e8ee;
+    padding: 8px 0;
+    cursor: pointer;
+}
+
+.neighbor-item:first-child {
+    border-top: none;
+}
+
+.neighbor-item:hover {
+    background: #eef3f8;
+}
+
+.neighbor-item .neighbor-meta {
+    font-size: 11px;
+    color: #888;
+}
+
+/* ---- Topic x Section matrix ---- */
+
+#matrix-wrap {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    overflow-x: auto;
+}
+
+#topic-matrix {
+    display: block;
+    margin: 0 auto;
+}
+
+.matrix-cell {
+    stroke: white;
+    stroke-width: 1px;
+    cursor: pointer;
+}
+
+.matrix-cell.cell-selected {
+    stroke: #d62728;
+    stroke-width: 2.5px;
+}
+
+.axis-label-x, .axis-label-y {
+    font-size: 12px;
+    fill: #222;
+}
+
+.matrix-legend {
+    display: flex;
+    justify-content: center;
+    margin-top: 8px;
+}
+
+/* ---- Semantic map points ---- */
+
+.point {
+    cursor: pointer;
+    stroke: #fff;
+    stroke-width: 0.6px;
+}
+
+.point.selected-point {
+    stroke: #d62728;
+    stroke-width: 2.5px;
+}
+
+.point.neighbor-point {
+    stroke: #ff7f0e;
+    stroke-width: 2px;
+}
+
+.point.matrix-highlight {
+    stroke: #2a5d84;
+    stroke-width: 2px;
+}
+
+.point.dimmed {
+    opacity: 0.06;
+}
+
+/* ---- Findings ---- */
+
+#findings dl dt {
+    font-weight: bold;
+    margin-top: 14px;
+}
+
+#findings dl dd {
+    margin-left: 0;
+    margin-bottom: 6px;
+    line-height: 1.5;
+}
+
+#findings .evidence {
+    font-size: 13px;
+    color: #555;
+    font-style: italic;
+}
+
+/* ---- Corpus overview charts ---- */
+
+.axis text {
+    font-size: 12px;
+}
+
+.axis-title {
+    font-size: 12px;
+    fill: #555;
+}
+
+.gridline line {
+    stroke: #eee;
+}
+
+.gridline path {
+    stroke: none;
+}
+
+table.section-table {
+    width: 100%;
+    font-size: 13px;
+    border-collapse: collapse;
+}
+
+table.section-table th, table.section-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #eee;
+    text-align: left;
+}
+
+table.section-table th {
+    background: #f5f5f5;
+}
+
+@media (max-width: 900px) {
+    .map-sidebar {
+        flex: 1 1 100%;
+    }
+}

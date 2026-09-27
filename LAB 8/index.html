@@ -1,26 +1,277 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Lab 8</title>
-
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="lab8.css?v=4">
+    <title>Lab 8 - Web Text Data and Visualization: Exploring the DKU Undergraduate Bulletin</title>
 </head>
 
-<body>
+<body class="lab8-body">
 
-    <h1>Lab 8</h1>
+    <h1>Lab 8 - Web Text Data and Visualization: Exploring the DKU Undergraduate Bulletin</h1>
 
-    <p>
-        Lab 8 will be added here.
-    </p>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+        <a href="../Individual Project – Visualization Critique and Redesign/index.html">Visualization Critique and Redesign</a>
+    </nav>
 
-    <a href="../index.html">
-        Back to home
-    </a>
+    <!-- ============ 1. Bulletin / Corpus Description ============ -->
+    <div class="dataset-section">
+        <h2>1. Bulletin / Corpus Description</h2>
+        <p>
+            <strong>Document:</strong> <em>Bulletin of Duke Kunshan University Undergraduate Instruction, 2025-2026</em>
+            (435 pages).<br>
+            <strong>Version:</strong> Coordinating edition dated July 2025, covering academic year 2025-2026.<br>
+            <strong>Source:</strong> PDF provided for this assignment
+            (<a href="https://duke.app.box.com/s/4qez9bss1vjmkccn2rcqbhphcmh9wpxs" target="_blank" rel="noopener"><code>ug_bulletin_2025-2026.pdf</code></a>),
+            issued by the Office of the Registrar.<br>
+            <strong>Date accessed:</strong> September 27, 2026.
+        </p>
+        <p>
+            The bulletin's own Table of Contents lists 12 top-level "Parts" (chapters), covering everything
+            from mission and admissions policy to the full undergraduate curriculum, academic procedures,
+            student life, and a 340-page catalog of majors and course descriptions. The catalog
+            (Part 10: Majors and Courses) alone accounts for roughly 78% of the document's pages.
+        </p>
+        <div class="stat-cards" id="corpus-stat-cards"></div>
+        <p class="justification">
+            <strong>Pipeline summary:</strong> The PDF was parsed with <code>pdfplumber</code>. The Table of
+            Contents (pages 3-9) was parsed first to recover the chapter &rarr; section &rarr; subsection
+            hierarchy with page numbers. The remaining 426 pages were then walked line-by-line: TOC headings
+            (matched against body text) update the current chapter/section/subsection; individual course
+            headers (regex-matched "CODE ### Title (N credits)" patterns, including cross-listed codes like
+            "SOCIOL 223/PUBPOL 223") start a new passage tagged with that course as the subsection; and,
+            as a fallback for ordinary prose, a vertical-gap heuristic (line-to-line spacing of ~13-14pt
+            within a paragraph vs. ~27-28pt between paragraphs, measured from word bounding boxes) splits
+            new paragraphs. This extracted <strong>2,813 raw passages</strong>. Cleaning removed exact
+            duplicates (mostly repeated table headers like "Course Code Course Name Credit" and repeated
+            required-course rows shared across majors), passages under 8 words, and passages that combined
+            course-code-like tokens with no terminal punctuation (a signature of PDF table rows that don't
+            reduce to coherent prose, e.g. requirement-table rows). This left
+            <strong>1,165 cleaned passages</strong> across all 12 chapters and 85 distinct
+            chapter/section combinations, averaging 85 words each. Major-requirement tables were the biggest
+            source of noise and are intentionally under-represented in the final corpus; this is discussed
+            further in the Design Description.
+        </p>
+    </div>
+
+    <!-- ============ 2. Corpus Overview ============ -->
+    <div class="dataset-section">
+        <h2>2. Corpus Overview</h2>
+        <div class="viz-row">
+            <div class="viz-col viz-col-wide">
+                <h3>Passages by Chapter</h3>
+                <div id="chart-by-chapter"></div>
+            </div>
+        </div>
+        <div class="viz-row">
+            <div class="viz-col">
+                <h3>Top TF-IDF Terms (Corpus-Wide)</h3>
+                <div id="chart-tfidf"></div>
+            </div>
+            <div class="viz-col">
+                <h3>Passage Length Distribution</h3>
+                <div id="chart-wordcount"></div>
+            </div>
+        </div>
+        <div class="viz-row">
+            <div class="viz-col viz-col-wide">
+                <h3>Largest Formal Sections</h3>
+                <div id="table-sections"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 3. Semantic Embedding Map ============ -->
+    <div class="dataset-section">
+        <h2>3. Semantic Embedding Map</h2>
+        <p>
+            Each point is one passage. Position reflects semantic similarity (384-dim
+            <code>all-MiniLM-L6-v2</code> sentence embeddings, projected to 2D with UMAP,
+            cosine metric); nearby points discuss similar ideas, but the raw x/y axes have no
+            independent meaning. Color encodes the semantic topic (K-Means cluster); point size
+            encodes passage length in words.
+        </p>
+        <div class="filters" id="map-filters">
+            <label>Search text
+                <input type="text" id="search-input" placeholder="e.g. credit, graduation, registration...">
+            </label>
+            <label>Formal section (Part)
+                <select id="chapter-filter"><option value="">All chapters</option></select>
+            </label>
+            <label>Semantic topic
+                <select id="topic-filter"><option value="">All topics</option></select>
+            </label>
+            <label>&nbsp;
+                <button id="reset-zoom-btn">Reset zoom</button>
+            </label>
+        </div>
+        <div class="map-layout">
+            <div class="map-svg-wrap">
+                <svg id="semantic-map"></svg>
+            </div>
+            <div class="map-sidebar">
+                <div id="legend-panel" class="side-box">
+                    <div class="legend-title">Semantic Topics (click to filter)</div>
+                    <div id="topic-legend"></div>
+                </div>
+                <div id="detail-panel" class="side-box important-box">
+                    <div class="legend-title">Passage Details</div>
+                    <p class="placeholder-text">Click a point on the map (or a cell in the matrix below) to see details here.</p>
+                </div>
+                <div id="neighbors-panel" class="side-box important-box">
+                    <div class="legend-title">Nearest Semantic Neighbors</div>
+                    <p class="placeholder-text">Neighbors of the selected passage will appear here.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 4. Topic x Bulletin Section Matrix ============ -->
+    <div class="dataset-section">
+        <h2>4. Topic &times; Bulletin Section Matrix</h2>
+        <p>
+            Rows are the bulletin's 12 formal chapters ("Parts"); columns are the 12 semantic topics
+            discovered by clustering. Cell darkness encodes how many passages of that topic occur in
+            that chapter. Click a cell to highlight the matching passages on the semantic map above;
+            click a map point to see its cell highlighted here.
+        </p>
+        <div id="matrix-wrap"><svg id="topic-matrix"></svg></div>
+        <div class="matrix-legend"><svg id="matrix-legend-svg"></svg></div>
+        <div id="matrix-tooltip" class="tooltip"></div>
+    </div>
+
+    <!-- ============ 5. Semantic Findings ============ -->
+    <div class="dataset-section">
+        <h2>5. Semantic Findings</h2>
+        <div id="findings">
+            <dl>
+                <dt>1. What are the major semantic topics?</dt>
+                <dd>
+                    K-Means (k=12) on the sentence embeddings surfaces topics that mix disciplinary and
+                    administrative themes: <em>Degree &amp; Major Requirement Structures</em> (139 passages),
+                    <em>History, Literature &amp; Global Cultures</em> (135), <em>Academic Standing, Grading
+                    &amp; Registration</em> (128), <em>Math, Science &amp; Physical Education Courses</em> (127),
+                    <em>Public Policy, Politics &amp; Environment</em> (125), <em>China &amp; Chinese
+                    Language/Culture Studies</em> (108), <em>Arts, Media &amp; Digital Design</em> (107),
+                    <em>Student Life, Research &amp; Signature Work</em> (104), <em>DKU Policies, Credit
+                    Transfer &amp; Degree Standards</em> (103), plus three smaller, tighter topics:
+                    <em>Anthropology, Global Health &amp; Course Updates</em> (42), <em>Tuition, Financial Aid
+                    &amp; Costs</em> (31), and a very narrow <em>Quantitative Social Science (Econometrics)</em>
+                    cluster (16, dominated by repeated SOSC panel-data course rows).
+                </dd>
+
+                <dt>2. Which topics appear across multiple formal sections (chapters)?</dt>
+                <dd>
+                    <em>DKU Policies, Credit Transfer &amp; Degree Standards</em> is the most widely spread
+                    topic, appearing in 9 of the 12 chapters &mdash; it captures generic institutional/eligibility
+                    language that recurs everywhere from admissions to majors. <em>Student Life, Research
+                    &amp; Signature Work</em> (8 chapters), <em>Academic Standing, Grading &amp; Registration</em>
+                    (7), <em>China &amp; Chinese Language/Culture Studies</em> (7), and <em>Degree &amp; Major
+                    Requirement Structures</em> (7) are also broadly distributed. By contrast, the three
+                    smallest topics each live almost entirely inside a single chapter (Part 10), confirming
+                    that narrow, jargon-heavy course clusters don't leak into other parts of the bulletin.
+                </dd>
+
+                <dt>3. Which formal sections contain the most semantically diverse content?</dt>
+                <dd>
+                    By topic entropy (independent of section size), <strong>Part 10: Majors and Courses</strong>
+                    is the most diverse overall (10 of 12 topics present, entropy 2.98) &mdash; unsurprising
+                    given its size, but notable because a single chapter spans nearly every discipline
+                    offered at DKU. More interesting are two small administrative chapters that turn out to
+                    be disproportionately diverse: <strong>Part 4: Admission, Scholarships and Financial
+                    Aid</strong> (only 23 passages, but entropy 2.26 across 5 topics) and <strong>Part 8:
+                    Career Services, Research Opportunities, and Study Away</strong> (35 passages, entropy 2.14
+                    across 5 topics). At the other extreme, <strong>Part 7: Academic Advising and Support</strong>
+                    is completely homogeneous (entropy 0.00; all 11 passages land in the "Student Life,
+                    Research &amp; Signature Work" topic).
+                </dd>
+
+                <dt>4. Which passages from different sections are semantically similar?</dt>
+                <dd>
+                    The map surfaces several genuine cross-section echoes. DKU's <em>Mission Statement</em>
+                    (Part 1) sits near the <em>21st Century Curriculum</em> description (Part 2) &mdash; both
+                    restate the same "liberal arts" framing in different chapters. The <em>Statement on
+                    Diversity and Inclusion</em> (Part 1) neighbors <em>Campus Programs</em> (Part 9), since
+                    both describe DKU's community values. <em>Who We Are</em> (Part 1) neighbors <em>Degree
+                    Requirements</em> (Part 3), because both passages describe DKU's relationship to Duke
+                    University's academic standards. And the <em>Partners/Wuhan University</em> passage
+                    (Part 1) sits near the <em>Study Away</em> section (Part 8), both discussing DKU's network
+                    of partner institutions.
+                </dd>
+
+                <dt>5. Which passages appear unusual relative to their formal section?</dt>
+                <dd>
+                    64 passages (about 5.5% of the corpus) have a majority of their nearest semantic
+                    neighbors in a <em>different</em> chapter than their own &mdash; a proxy for "this doesn't
+                    read like the rest of its section." These cluster heavily in <strong>Parts 1-3</strong>
+                    (General Information, A Liberal Arts Education, The Curriculum): short, early narrative
+                    passages introducing DKU's mission and values. Rather than forming their own topic, they
+                    scatter into the broader "Student Life" and "DKU Policies" topics &mdash; suggesting these
+                    opening chapters don't have a distinct semantic voice of their own; they read as a preview
+                    of themes developed at length later in the bulletin.
+                </dd>
+
+                <dt>6. Searching "credit", "graduation", "registration", "academic integrity"</dt>
+                <dd>
+                    These four terms behave very differently. <strong>"credit"</strong> is pervasive: 697 of
+                    1,165 passages (~60%) mention it, spread across all 12 topics and 8 chapters &mdash; it's
+                    load-bearing vocabulary everywhere from course descriptions to financial aid. <strong>
+                    "graduation"</strong> is far more concentrated: 42 passages, mostly in the "DKU Policies"
+                    and "Academic Standing, Grading &amp; Registration" topics. <strong>"registration"</strong>
+                    is tighter still (17 passages, mostly one topic). Most strikingly, <strong>"academic
+                    integrity"</strong> appears in only 5 passages total, thinly scattered across 5 different
+                    topics and just 2 chapters &mdash; despite being a named policy section in the bulletin, the
+                    literal phrase is rarely repeated in body text, so a keyword search alone would badly
+                    under-count how much of the document actually concerns integrity-adjacent conduct policy.
+                </dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- ============ 6. Design Description ============ -->
+    <div class="dataset-section">
+        <h2>6. Design Description</h2>
+        <p class="justification">
+            The corpus is 1,165 cleaned passages extracted from the 435-page DKU bulletin (see Section 1
+            for the extraction pipeline). Each passage was embedded with <code>sentence-transformers</code>'
+            <code>all-MiniLM-L6-v2</code> model (384 dimensions, cosine-normalized), then projected to 2D with
+            UMAP (<code>n_neighbors=15</code>, <code>min_dist=0.15</code>, cosine metric, seed 401) purely for
+            visual layout &mdash; nearby points are similar, but the axes themselves are not interpreted.
+            Topics were generated by K-Means (k=12) on the original 384-dim embeddings (not the 2D projection,
+            to avoid compounding UMAP's distortion), then labeled by hand after reading each cluster's five
+            centroid-nearest passages alongside its top TF-IDF terms; labels blend discipline and function
+            (e.g. "Degree &amp; Major Requirement Structures") because DKU's course catalog structure mixes
+            both. The semantic map encodes position as embedding similarity, color as topic, and point radius
+            as passage length in words &mdash; a deliberately restrained channel set so the topic-color pattern
+            stays legible. The Topic&times;Section matrix instead encodes the bulletin's formal hierarchy
+            (chapter rows) against the same topic labels (columns), letting a viewer see at a glance which
+            topics are chapter-specific vs. bulletin-wide. The two views are coordinated in both directions:
+            clicking a matrix cell sets the map's chapter/topic filters to isolate that cell's passages, and
+            clicking a map point outlines its corresponding matrix cell and opens a detail panel with its
+            five nearest semantic neighbors (each a link back into the map), so a reader can move fluidly
+            between "where is this in the document" and "what else discusses the same idea."
+        </p>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab8.js?v=4"></script>
 
 </body>
 

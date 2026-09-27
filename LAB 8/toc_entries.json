@@ -1,0 +1,1397 @@
+[
+  [
+    0,
+    "Part 1: General Information",
+    9
+  ],
+  [
+    1,
+    "Mission Statement",
+    9
+  ],
+  [
+    1,
+    "Statement on Diversity and Inclusion",
+    10
+  ],
+  [
+    1,
+    "Who We Are",
+    10
+  ],
+  [
+    1,
+    "Partners",
+    11
+  ],
+  [
+    2,
+    "Duke University",
+    11
+  ],
+  [
+    2,
+    "Wuhan University",
+    11
+  ],
+  [
+    2,
+    "Kunshan",
+    12
+  ],
+  [
+    1,
+    "Duke Kunshan University Community Standard",
+    12
+  ],
+  [
+    0,
+    "Part 2: A Liberal Arts Education at Duke Kunshan University",
+    13
+  ],
+  [
+    1,
+    "A 21st Century Curriculum",
+    13
+  ],
+  [
+    1,
+    "A Liberal Arts College Experience",
+    13
+  ],
+  [
+    1,
+    "Dual Degrees",
+    13
+  ],
+  [
+    1,
+    "Animating Principles",
+    13
+  ],
+  [
+    0,
+    "Part 3: The Curriculum",
+    15
+  ],
+  [
+    1,
+    "Overview",
+    15
+  ],
+  [
+    1,
+    "Key Components",
+    16
+  ],
+  [
+    2,
+    "Structures",
+    16
+  ],
+  [
+    2,
+    "Core Components",
+    16
+  ],
+  [
+    1,
+    "Degree Requirements",
+    19
+  ],
+  [
+    2,
+    "General Education Requirements",
+    19
+  ],
+  [
+    2,
+    "Common Core (3 courses, 12 credits)",
+    19
+  ],
+  [
+    2,
+    "Distribution Requirement (3 courses, 12 credits)",
+    19
+  ],
+  [
+    2,
+    "Quantitative Reasoning Course Requirement (1 course, 4 credits)",
+    20
+  ],
+  [
+    2,
+    "Language Courses (4-8 courses, 8-16 credits)",
+    20
+  ],
+  [
+    2,
+    "Writing Course (1 course, 2 credits)",
+    21
+  ],
+  [
+    2,
+    "Major Requirements (16-19 courses, 64-76 credits)",
+    22
+  ],
+  [
+    2,
+    "Divisional Foundation Courses (2 to 5 courses, 8 to 20 credits, depending on major)",
+    22
+  ],
+  [
+    2,
+    "Interdisciplinary Studies (4 to 7 courses, 16 to 28 credits, depending on major)",
+    22
+  ],
+  [
+    2,
+    "Disciplinary Studies (4 to 8 courses, 16 to 32 credits, depending on major)",
+    22
+  ],
+  [
+    2,
+    "Signature Work (8 credits)",
+    23
+  ],
+  [
+    2,
+    "Credits Required for Degree",
+    24
+  ],
+  [
+    2,
+    "Non-Credit Mini-Term Courses",
+    25
+  ],
+  [
+    2,
+    "DKU 101 (0 Credits)",
+    26
+  ],
+  [
+    0,
+    "Part 4: Admission, Scholarships and Financial Aid",
+    27
+  ],
+  [
+    1,
+    "Principles of Selection",
+    27
+  ],
+  [
+    1,
+    "How to Apply",
+    27
+  ],
+  [
+    1,
+    "Application Timelines",
+    27
+  ],
+  [
+    1,
+    "Application Requirements",
+    28
+  ],
+  [
+    1,
+    "Scholarships and Financial Aid",
+    29
+  ],
+  [
+    1,
+    "Notification and Responses",
+    30
+  ],
+  [
+    0,
+    "Part 5: Financial Information",
+    31
+  ],
+  [
+    1,
+    "Tuition and Fees",
+    31
+  ],
+  [
+    1,
+    "Estimated Expenses",
+    31
+  ],
+  [
+    2,
+    "Enrollment Deposit",
+    32
+  ],
+  [
+    2,
+    "Residence Charge",
+    32
+  ],
+  [
+    2,
+    "Health Insurance",
+    32
+  ],
+  [
+    2,
+    "Fees for Courses",
+    33
+  ],
+  [
+    2,
+    "Study Away Costs",
+    33
+  ],
+  [
+    2,
+    "Student Bills",
+    33
+  ],
+  [
+    2,
+    "Payment",
+    33
+  ],
+  [
+    2,
+    "Restriction on Past Due Accounts",
+    33
+  ],
+  [
+    1,
+    "Refund",
+    33
+  ],
+  [
+    0,
+    "Part 6: Academic Procedures and Information",
+    35
+  ],
+  [
+    1,
+    "Academic Integrity",
+    35
+  ],
+  [
+    2,
+    "Academic Integrity: Undergraduate Program Policies",
+    35
+  ],
+  [
+    1,
+    "Entrance Credit and Placement",
+    36
+  ],
+  [
+    2,
+    "Forfeiture of Precollege Credit Awarded",
+    36
+  ],
+  [
+    2,
+    "College Board Advanced Placement Program (AP) Examinations",
+    37
+  ],
+  [
+    2,
+    "International Placement Credit (IPC)",
+    37
+  ],
+  [
+    2,
+    "Prematriculation Credit",
+    37
+  ],
+  [
+    2,
+    "Placement in Languages",
+    37
+  ],
+  [
+    2,
+    "Other Placement Tests",
+    38
+  ],
+  [
+    1,
+    "Transfer of Work Taken Elsewhere",
+    39
+  ],
+  [
+    2,
+    "Work Taken During High School",
+    39
+  ],
+  [
+    2,
+    "Work Taken After Matriculation at Duke Kunshan University",
+    39
+  ],
+  [
+    2,
+    "Transfer Credit for Foreign Language",
+    40
+  ],
+  [
+    1,
+    "Class Level",
+    41
+  ],
+  [
+    1,
+    "Time Limit for Completing Undergraduate Degree",
+    41
+  ],
+  [
+    1,
+    "Enrollment and Activity Restrictions Beyond the Eighth Semester",
+    41
+  ],
+  [
+    1,
+    "Registration",
+    42
+  ],
+  [
+    2,
+    "Course Changes after Classes Begin in the Fall and Spring Terms (Class Drop/Add)",
+    42
+  ],
+  [
+    2,
+    "Withdrawal from a Course",
+    43
+  ],
+  [
+    2,
+    "Course Changes for the Summer Terms",
+    43
+  ],
+  [
+    1,
+    "Undergraduate Course Load",
+    43
+  ],
+  [
+    2,
+    "Students on Academic Probation",
+    44
+  ],
+  [
+    2,
+    "Overload",
+    44
+  ],
+  [
+    2,
+    "Underload",
+    44
+  ],
+  [
+    2,
+    "Withdrawal to an Underload",
+    45
+  ],
+  [
+    2,
+    "Medical Withdrawal from a Course",
+    45
+  ],
+  [
+    2,
+    "Enrollment in an Underload",
+    46
+  ],
+  [
+    1,
+    "Eligibility for Courses",
+    46
+  ],
+  [
+    1,
+    "Course Repeat",
+    47
+  ],
+  [
+    1,
+    "Course Audit",
+    48
+  ],
+  [
+    1,
+    "Two-Credit Writing Courses",
+    49
+  ],
+  [
+    1,
+    "CHSC (Chinese Society and Culture) Courses",
+    49
+  ],
+  [
+    1,
+    "Common Core Courses",
+    50
+  ],
+  [
+    1,
+    "Independent Studies",
+    50
+  ],
+  [
+    1,
+    "Submission of Term Paper",
+    50
+  ],
+  [
+    1,
+    "Declaration of Major",
+    51
+  ],
+  [
+    1,
+    "Class Attendance and Missed Work",
+    51
+  ],
+  [
+    1,
+    "Class Scheduling",
+    52
+  ],
+  [
+    1,
+    "Incomplete Coursework and Excused Absence from Final Exam",
+    52
+  ],
+  [
+    1,
+    "Final Examinations",
+    53
+  ],
+  [
+    1,
+    "Signature Work and Capstone Courses",
+    54
+  ],
+  [
+    1,
+    "Grading and Grade Requirements",
+    54
+  ],
+  [
+    2,
+    "Passing Grades",
+    54
+  ],
+  [
+    2,
+    "Failing Grades",
+    55
+  ],
+  [
+    2,
+    "Grade Point Average",
+    55
+  ],
+  [
+    2,
+    "Credit/No Credit (CR/NC) Grading System",
+    55
+  ],
+  [
+    2,
+    "The W and WA Designations",
+    57
+  ],
+  [
+    1,
+    "Progress toward Degree",
+    57
+  ],
+  [
+    2,
+    "Satisfactory Performance Each Term (Term Credit Requirements)",
+    58
+  ],
+  [
+    1,
+    "Academic Warning, Probation, and Suspension for Students",
+    58
+  ],
+  [
+    2,
+    "Academic Warning",
+    59
+  ],
+  [
+    2,
+    "Academic Probation",
+    59
+  ],
+  [
+    2,
+    "Academic Suspension",
+    60
+  ],
+  [
+    1,
+    "Changes in Status",
+    61
+  ],
+  [
+    2,
+    "Voluntary Withdrawal",
+    61
+  ],
+  [
+    2,
+    "Involuntary Withdrawal, Involuntary Leave of Absence or Suspension",
+    61
+  ],
+  [
+    2,
+    "Leave of Absence",
+    61
+  ],
+  [
+    2,
+    "Full-time and Part-time Degree Status",
+    64
+  ],
+  [
+    2,
+    "Undergraduate Status",
+    64
+  ],
+  [
+    1,
+    "Academic Recognition and Honors",
+    64
+  ],
+  [
+    2,
+    "Dean's List",
+    64
+  ],
+  [
+    2,
+    "Graduation with Signature Work Distinction",
+    64
+  ],
+  [
+    2,
+    "Latin Honors",
+    64
+  ],
+  [
+    1,
+    "Notification of Intention to Graduate",
+    65
+  ],
+  [
+    1,
+    "Graduation and Commencement",
+    65
+  ],
+  [
+    1,
+    "Education Records",
+    65
+  ],
+  [
+    1,
+    "The Provision of Academic Information to Parents and Guardians",
+    66
+  ],
+  [
+    1,
+    "Procedure for Resolution of Students' Academic Concerns",
+    66
+  ],
+  [
+    1,
+    "Grade Appeal Procedure",
+    68
+  ],
+  [
+    1,
+    "Removal of Disruptive Students from a Course",
+    69
+  ],
+  [
+    1,
+    "Compliance with Academic Regulations",
+    69
+  ],
+  [
+    1,
+    "Religious Holidays",
+    70
+  ],
+  [
+    0,
+    "Part 7: Academic Advising and Support",
+    71
+  ],
+  [
+    1,
+    "Academic Advising",
+    71
+  ],
+  [
+    1,
+    "Academic Resource Center",
+    72
+  ],
+  [
+    1,
+    "Seven Principles of Duke Kunshan University Academic Advising",
+    72
+  ],
+  [
+    0,
+    "Part 8: Career Services, Research Opportunities, and Study Away",
+    74
+  ],
+  [
+    1,
+    "Career Services",
+    74
+  ],
+  [
+    1,
+    "Student Research Opportunities",
+    75
+  ],
+  [
+    1,
+    "Study Away",
+    76
+  ],
+  [
+    0,
+    "Part 9: Student Experience and Campus Life",
+    82
+  ],
+  [
+    1,
+    "Student Experience",
+    82
+  ],
+  [
+    2,
+    "Core Values",
+    82
+  ],
+  [
+    1,
+    "Residence Life",
+    82
+  ],
+  [
+    1,
+    "Living on Campus - Residence Halls",
+    83
+  ],
+  [
+    1,
+    "Diversity & Intercultural Engagement",
+    84
+  ],
+  [
+    1,
+    "Leadership Programs",
+    84
+  ],
+  [
+    1,
+    "Campus Engagement",
+    84
+  ],
+  [
+    1,
+    "Arts and Culture",
+    84
+  ],
+  [
+    1,
+    "The Community Center",
+    85
+  ],
+  [
+    1,
+    "Campus Programs",
+    85
+  ],
+  [
+    1,
+    "First Year Experience",
+    85
+  ],
+  [
+    1,
+    "Student Clubs and Organizations",
+    86
+  ],
+  [
+    1,
+    "Student Conduct",
+    86
+  ],
+  [
+    1,
+    "Athletics & University Sports",
+    86
+  ],
+  [
+    1,
+    "Counseling and Wellness Services (CAWS)",
+    87
+  ],
+  [
+    1,
+    "Campus Health Clinic",
+    87
+  ],
+  [
+    1,
+    "Student Care",
+    88
+  ],
+  [
+    1,
+    "Student Accessibility Service Office",
+    88
+  ],
+  [
+    1,
+    "Chinese Student Services and Student Mobility",
+    88
+  ],
+  [
+    1,
+    "International Student Services",
+    89
+  ],
+  [
+    0,
+    "Part 10: Majors and Courses",
+    90
+  ],
+  [
+    1,
+    "Requirements for All Majors",
+    90
+  ],
+  [
+    2,
+    "Common Core (12 Credits)",
+    90
+  ],
+  [
+    2,
+    "Distributional Requirement and Quantitative Reasoning Course Requirement (16 Credits)",
+    90
+  ],
+  [
+    2,
+    "Language Courses (8-16 Credits)",
+    90
+  ],
+  [
+    2,
+    "Writing Course (2 Credits)",
+    91
+  ],
+  [
+    2,
+    "Signature Work Capstone Courses (8 credits)",
+    91
+  ],
+  [
+    2,
+    "Mini-Term Course (0 Credits)",
+    91
+  ],
+  [
+    2,
+    "DKU 101(0 Credits)",
+    91
+  ],
+  [
+    2,
+    "Ability to Meet Major Requirements Published in Years Subsequent to Year of Matriculation",
+    92
+  ],
+  [
+    1,
+    "Majors (listed in alphabetical order)",
+    93
+  ],
+  [
+    2,
+    "Applied Mathematics and Computational Sciences with tracks in Computer Science and Mathematics",
+    93
+  ],
+  [
+    2,
+    "Applied Mathematics and Computational Sciences/Computer Science",
+    94
+  ],
+  [
+    2,
+    "Applied Mathematics and Computational Sciences/Mathematics",
+    97
+  ],
+  [
+    2,
+    "Arts & Media Major with tracks in Arts and Media",
+    100
+  ],
+  [
+    2,
+    "Arts and Media/Arts",
+    102
+  ],
+  [
+    2,
+    "Arts and Media/Media",
+    107
+  ],
+  [
+    2,
+    "Behavioral Science with tracks in Economics, Neuroscience, and Psychology",
+    112
+  ],
+  [
+    2,
+    "Behavioral Science / Economics",
+    114
+  ],
+  [
+    2,
+    "Behavioral Science / Neuroscience",
+    117
+  ],
+  [
+    2,
+    "Behavioral Science / Psychology",
+    119
+  ],
+  [
+    2,
+    "Computation and Design with tracks in Computer Science, Digital Media, and Social Policy",
+    122
+  ],
+  [
+    2,
+    "Computation and Design / Computer Science",
+    123
+  ],
+  [
+    2,
+    "Computation and Design / Digital Media",
+    126
+  ],
+  [
+    2,
+    "Computation and Design / Social Policy",
+    129
+  ],
+  [
+    2,
+    "Cultures and Societies with tracks in Cultural Anthropology and Sociology",
+    133
+  ],
+  [
+    2,
+    "Cultures and Societies / Cultural Anthropology",
+    134
+  ],
+  [
+    2,
+    "Cultures and Societies / Sociology",
+    136
+  ],
+  [
+    2,
+    "Data Science",
+    139
+  ],
+  [
+    2,
+    "Data Science",
+    140
+  ],
+  [
+    2,
+    "Environmental Science with tracks in Biogeochemistry, Biology, Chemistry, and Public Policy143 Environmental Science / Biogeochemistry",
+    145
+  ],
+  [
+    2,
+    "Environmental Science / Biology",
+    148
+  ],
+  [
+    2,
+    "Environmental Science / Chemistry",
+    151
+  ],
+  [
+    2,
+    "Environmental Science / Public Policy",
+    154
+  ],
+  [
+    2,
+    "Global China Studies",
+    157
+  ],
+  [
+    2,
+    "Global China Studies",
+    158
+  ],
+  [
+    2,
+    "Global Health with Tracks in Biology and Public Policy",
+    160
+  ],
+  [
+    2,
+    "Global Health / Biology",
+    161
+  ],
+  [
+    2,
+    "Global Health / Public Policy",
+    165
+  ],
+  [
+    2,
+    "Humanities with Tracks in Creative Writing and Translation, Literature, Philosophy and Religion, and World History",
+    169
+  ],
+  [
+    2,
+    "Humanities / Creative Writing and Translation",
+    171
+  ],
+  [
+    2,
+    "Humanities / Literature",
+    173
+  ],
+  [
+    2,
+    "Humanities / Philosophy and Religion",
+    175
+  ],
+  [
+    2,
+    "Humanities / World History",
+    177
+  ],
+  [
+    2,
+    "Materials Science with tracks in Chemistry and Physics",
+    179
+  ],
+  [
+    2,
+    "Materials Science / Chemistry",
+    180
+  ],
+  [
+    2,
+    "Materials Science / Physics",
+    182
+  ],
+  [
+    2,
+    "Molecular Bioscience with Tracks in Biogeochemistry, Biophysics, Cell and Molecular Biology, Genetics and Genomics, and Neuroscience",
+    185
+  ],
+  [
+    2,
+    "Molecular Bioscience / Biogeochemistry",
+    188
+  ],
+  [
+    2,
+    "Molecular Bioscience / Biophysics",
+    190
+  ],
+  [
+    2,
+    "Molecular Bioscience / Cell and Molecular Biology",
+    192
+  ],
+  [
+    2,
+    "Molecular Bioscience / Genetics and Genomics",
+    195
+  ],
+  [
+    2,
+    "Molecular Bioscience / Neuroscience",
+    197
+  ],
+  [
+    2,
+    "Philosophy, Politics, and Economics, with tracks in Economic History, Philosophy, Political Science, and Public Policy",
+    199
+  ],
+  [
+    2,
+    "Philosophy, Politics, and Economics / Economic History",
+    200
+  ],
+  [
+    2,
+    "Philosophy, Politics, and Economics / Philosophy",
+    202
+  ],
+  [
+    2,
+    "Philosophy, Politics, and Economics / Political Science",
+    204
+  ],
+  [
+    2,
+    "Philosophy, Politics, and Economics / Public Policy",
+    206
+  ],
+  [
+    2,
+    "Quantitative Political Economy with tracks in Economics, Political Science, and Public Policy",
+    208
+  ],
+  [
+    2,
+    "Quantitative Political Economy / Economics",
+    209
+  ],
+  [
+    2,
+    "Quantitative Political Economy / Political Science",
+    212
+  ],
+  [
+    2,
+    "Quantitative Political Economy / Public Policy",
+    214
+  ],
+  [
+    1,
+    "Course Descriptions",
+    216
+  ],
+  [
+    2,
+    "Courses with Course Subject: Arts (ARTS)",
+    216
+  ],
+  [
+    2,
+    "Courses with Course Subject: Arts and Humanities (ARHU)",
+    219
+  ],
+  [
+    2,
+    "Courses with Course Subject: Behavior Science (BEHAVSCI)",
+    220
+  ],
+  [
+    2,
+    "Courses with Course Subject: Biology (BIOL)",
+    223
+  ],
+  [
+    2,
+    "Courses with Course Subject: Capstone (CAPSTONE)",
+    233
+  ],
+  [
+    2,
+    "Courses with Course Subject: Chemistry (CHEM)",
+    234
+  ],
+  [
+    2,
+    "Courses with Course Subject: Chinese (CHINESE)",
+    238
+  ],
+  [
+    2,
+    "Courses with Course Subject: Chinese Society and Culture (CHSC)",
+    248
+  ],
+  [
+    2,
+    "Courses with Course Subject: Computer Design (COMPDSGN)",
+    250
+  ],
+  [
+    2,
+    "Courses with Course Subject: Computer Science (COMPSCI)",
+    251
+  ],
+  [
+    2,
+    "Courses with Course Subject: Cultural Anthropology (CULANTH)",
+    257
+  ],
+  [
+    2,
+    "Courses with Course Subject: Cultures and Movements (CULMOVE)",
+    262
+  ],
+  [
+    2,
+    "Courses with Course Subject: Cultures and Societies (CULSOC)",
+    265
+  ],
+  [
+    2,
+    "Courses with Course Subject: DKU (DKU)",
+    267
+  ],
+  [
+    2,
+    "Courses with Course Subject: Economics (ECON)",
+    268
+  ],
+  [
+    2,
+    "Courses with Course Subject: English (ENGLISH)",
+    275
+  ],
+  [
+    2,
+    "Courses with Course Subject: English for Academic Purposes (EAP)",
+    276
+  ],
+  [
+    2,
+    "Courses with Course Subject: Environment (ENVIR)",
+    279
+  ],
+  [
+    2,
+    "Courses with Course Subject: Ethics and Leadership (ETHLDR)",
+    285
+  ],
+  [
+    2,
+    "Courses with Course Subject: French (FRENCH)",
+    288
+  ],
+  [
+    2,
+    "Courses with Course Subject: German (GERMAN)",
+    289
+  ],
+  [
+    2,
+    "Courses with Course Subject: Global China Studies (GCHINA)",
+    290
+  ],
+  [
+    2,
+    "Courses with Course Subject: Global Challenges (GLOCHALL)",
+    294
+  ],
+  [
+    2,
+    "Courses with Course Subject: Global Cultural Studies (GCULS)",
+    295
+  ],
+  [
+    2,
+    "Courses with Course Subject: History (HIST)",
+    304
+  ],
+  [
+    2,
+    "Courses with Course Subject: Humanities (HUM)",
+    318
+  ],
+  [
+    2,
+    "Courses with Course Subject: Independent Study (INDSTU)",
+    321
+  ],
+  [
+    2,
+    "Courses with Course Subject: Information Science (INFOSCI)",
+    322
+  ],
+  [
+    2,
+    "Courses with Course Subject: Integrated Science (INTGSCI)",
+    326
+  ],
+  [
+    2,
+    "Courses with Course Subject: Italian (ITALIAN)",
+    327
+  ],
+  [
+    2,
+    "Courses with Course Subject: Japanese (JAPANESE)",
+    328
+  ],
+  [
+    2,
+    "Courses with Course Subject: Korean (KOREAN)",
+    329
+  ],
+  [
+    2,
+    "Courses with Course Subject: Latin (LATIN)",
+    330
+  ],
+  [
+    2,
+    "Courses with Course Subject: Literature (LIT)",
+    331
+  ],
+  [
+    2,
+    "Courses with Course Subject: Material Science (MATSCI)",
+    341
+  ],
+  [
+    2,
+    "Courses with Course Subject: Mathematics (MATH)",
+    344
+  ],
+  [
+    2,
+    "Courses with Course Subject: Media (MEDIA)",
+    351
+  ],
+  [
+    2,
+    "Courses with Course Subject: Media and Arts (MEDIART)",
+    353
+  ],
+  [
+    2,
+    "Courses with Course Subject: Military Science (MILITSCI)",
+    365
+  ],
+  [
+    2,
+    "Courses with Course Subject: Music (MUSIC)",
+    366
+  ],
+  [
+    2,
+    "Courses with Course Subject: Neuroscience (NEUROSCI)",
+    367
+  ],
+  [
+    2,
+    "Courses with Course Subject: Philosophy (PHIL)",
+    368
+  ],
+  [
+    2,
+    "Courses with Course Subject: Philosophy, Politics and Economics (PPE)",
+    374
+  ],
+  [
+    2,
+    "Courses with Course Subject: Physics (PHYS)",
+    375
+  ],
+  [
+    2,
+    "Courses with Course Subject: Physical Education (PHYSEDU)",
+    380
+  ],
+  [
+    2,
+    "Courses with Course Subject: Political Economy (POLECON)",
+    387
+  ],
+  [
+    2,
+    "Courses with Course Subject: Political Science (POLSCI)",
+    389
+  ],
+  [
+    2,
+    "Courses with Course Subject: Psychology (PSYCH)",
+    398
+  ],
+  [
+    2,
+    "Courses with Course Subject: Public Policy (PUBPOL)",
+    400
+  ],
+  [
+    2,
+    "Courses with Course Subject: Research Independent Study (RINDSTU)",
+    406
+  ],
+  [
+    2,
+    "Courses with Course Subject: Religious Studies (RELIG)",
+    407
+  ],
+  [
+    2,
+    "Courses with Course Subject: Social Science (SOSC)",
+    410
+  ],
+  [
+    2,
+    "Courses with Course Subject: Sociology (SOCIOL)",
+    414
+  ],
+  [
+    2,
+    "Courses with Course Subject: Spanish (SPANISH)",
+    417
+  ],
+  [
+    2,
+    "Courses with Course Subject: Statistics (STATS)",
+    418
+  ],
+  [
+    2,
+    "Courses with Course Subject: Written and Oral Communication (WOC)",
+    421
+  ],
+  [
+    0,
+    "Part 11: DKU Academic Calendar Academic Year 2025-2026",
+    431
+  ],
+  [
+    2,
+    "Fall 2025",
+    431
+  ],
+  [
+    2,
+    "Spring 2026",
+    433
+  ],
+  [
+    2,
+    "Summer 2026",
+    434
+  ],
+  [
+    0,
+    "Part 12: Useful Contacts",
+    435
+  ]
+]
