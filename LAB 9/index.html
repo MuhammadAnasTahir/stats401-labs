@@ -101,28 +101,34 @@
         <h2>4. Design and Comparison</h2>
         <p class="justification" id="comparison-text">
             Both maps use the same 50 countries, the same October 2025 IMF GDP figures, and the same world
-            boundary file joined by ISO-3 code. The only difference is how the data is encoded visually.
+            boundary file joined by ISO-3 code. The only difference is the visual encoding. The choropleth
+            uses color to represent GDP while preserving each country's true shape and position. The
+            cartogram uses circle area to represent GDP while discarding shape entirely.
         </p>
         <p class="justification">
             In the choropleth, countries with large land area dominate the map regardless of their GDP.
-            Russia, Canada, and Australia rank 9th, 10th, and 15th by GDP respectively, but they take up most
-            of the map's space. Multiple smaller countries have higher GDP yet they are barely visible.
+            Russia, Canada, and Australia rank 9th, 10th, and 15th by GDP, but they take up most of the
+            map's space. Multiple smaller countries have higher GDP yet are barely visible. The choropleth
+            preserves true geographic shape, relative position, coastline detail, and adjacency between
+            neighbors, making it easy to identify regions and borders.
         </p>
         <p class="justification">
-            The cartogram corrects this issue. Russia, Canada, and Australia shrink to circles that reflect
-            their actual GDP rank. Meanwhile, geographically small economies like Switzerland, the
-            Netherlands, Singapore, Ireland, Belgium, and Taiwan grow into circles comparable to or larger
-            than Australia's, even though Australia is roughly 350 times their land area.
+            The cartogram corrects the land-area distortion. Russia, Canada, and Australia shrink to circles
+            that reflect their actual GDP rank. The United States and China become the most visually prominent
+            elements, as their circle sizes directly reflect their economic scale. Geographically small but
+            wealthy economies like Switzerland, the Netherlands, Singapore, Ireland, Belgium, and Taiwan grow
+            into circles comparable to or larger than Australia's. The cartogram distorts true shape, relative
+            land area, and spatial distances between neighbors. Circles are pushed apart by a force
+            simulation, so geographic proximity is only approximate.
         </p>
         <p class="justification">
-            Each map is better suited to a different kind of question. The choropleth preserves real
-            geography, so it works well for 'where' questions, such as regional GDP patterns or how
-            neighbouring countries compare. The cartogram drops shape and true area entirely, so it works
-            better for 'how much' questions, where land area would otherwise act as a distractor. The
-            difference in perception is sharp. The choropleth makes Russia and Canada look economically
-            dominant in a way their GDP ranks do not support. The cartogram maps area directly onto output,
-            so the United States, China, and some mid-sized European and Asian economies reflect their
-            dominance in the world economy.
+            Each map suits a different kind of question. The choropleth works well for "where" questions,
+            such as regional GDP patterns, how neighboring countries compare, or where geographic clusters
+            form. The cartogram works better for "how much" questions, like ranking economies by output or
+            comparing magnitudes, because land area no longer acts as a distractor. Switching from color to
+            area makes economic scale feel immediate. The choropleth makes Russia and Canada look dominant in
+            a way their GDP ranks do not support. The cartogram makes the gap between the US and China and
+            everyone else hard to overlook.
         </p>
     </div>
 
