@@ -1,26 +1,133 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Lab 6</title>
-
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="lab6.css?v=1">
+    <title>Lab 6 - Hierarchical Data Visualization: GDP Treemaps</title>
 </head>
 
-<body>
+<body class="lab6-body">
 
-    <h1>Lab 6</h1>
+    <h1>Lab 6 - Hierarchical Data Visualization: GDP Treemaps</h1>
 
-    <p>
-        Lab 6 will be added here.
-    </p>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+        <a href="../Individual Project – Visualization Critique and Redesign/index.html">Visualization Critique and Redesign</a>
+    </nav>
 
-    <a href="../index.html">
-        Back to home
-    </a>
+    <!-- ============ 1. Dataset Description ============ -->
+    <div class="dataset-section">
+        <h2>1. Dataset Description</h2>
+        <p>
+            The dataset contains 27 countries across 6 continents and 14 areas drawn from
+            <code>data/lab6_assignment_gdp.csv</code>. Each row lists a continent, an area within
+            that continent, a country, the country's GDP in US dollars and a GDP status of
+            increase, unchanged or decrease. GDP ranges from 120 billion dollars for Kenya to
+            27,800 billion dollars for the United States. Fifteen countries have a status of
+            increase, seven have a status of unchanged and five have a status of decrease. Because
+            this range is wide, rectangle area in both treemaps is proportional to the square root
+            of GDP rather than GDP itself. This keeps the smallest countries visible without
+            changing which countries appear larger or smaller. Tooltips always report the true GDP
+            value, not the transformed one.
+        </p>
+        <p>
+            The flat CSV was converted into nested JSON with a Python script
+            (<code>convert_hierarchy.py</code>), which groups the rows by continent, then by area,
+            then by country. The result is saved as
+            <code>data/lab6_gdp_hierarchy.json</code> and loaded directly by both treemaps below.
+            The hierarchy used in both treemaps is world, then continent, then area and then
+            country.
+        </p>
+    </div>
+
+    <!-- ============ 2. Treemap 1: Squarify ============ -->
+    <div class="dataset-section">
+        <h2>2. GDP Hierarchy Treemap: <u>Squarify Tiling</u></h2>
+        <p>
+            Each treemap shows the same hierarchy and the same data. Rectangle area encodes GDP in
+            US dollars and rectangle color encodes GDP status. Outlined boxes group countries by
+            area, and larger outlined boxes group areas by continent. Hover over a country
+            rectangle to see its continent, area, GDP and status.
+        </p>
+        <div class="treemap-figure">
+            <div class="treemap-legend-sidebar">
+                <svg id="treemap1-legend-svg"></svg>
+            </div>
+            <div class="treemap-wrap">
+                <svg id="treemap1-svg"></svg>
+            </div>
+        </div>
+        <p class="figure-caption figure-caption-center">
+            <strong>Figure 1.</strong> GDP hierarchy treemap using the Squarify tiling method.
+        </p>
+    </div>
+
+    <!-- ============ 3. Treemap 2: Binary ============ -->
+    <div class="dataset-section">
+        <h2>3. GDP Hierarchy Treemap: <u>Binary Tiling</u></h2>
+        <p>
+            This treemap uses the same hierarchy, the same values and the same color encoding as
+            Figure 1, but only the tiling method changes. The Binary method recursively splits the
+            available space into two groups at each step which produces a different set of
+            rectangle shapes than Squarify.
+        </p>
+        <div class="treemap-figure">
+            <div class="treemap-legend-sidebar">
+                <svg id="treemap2-legend-svg"></svg>
+            </div>
+            <div class="treemap-wrap">
+                <svg id="treemap2-svg"></svg>
+            </div>
+        </div>
+        <p class="figure-caption figure-caption-center">
+            <strong>Figure 2.</strong> GDP hierarchy treemap using the Binary tiling method.
+        </p>
+    </div>
+
+    <!-- ============ 4. Design Description ============ -->
+    <div class="dataset-section">
+        <h2>4. Design Description</h2>
+        <p class="justification">
+            GDP amount is encoded through rectangle area because area is the strongest channel for
+            comparing many quantities at once, and it is the default channel a treemap provides.
+            Area is scaled to the square root of GDP, not GDP itself. This keeps the smallest
+            countries visible instead of shrinking to invisible slivers, and the size order stays
+            the same. GDP status is encoded through color because status has only three categories
+            and color works well for small categorical sets. Green marks increase, gray marks
+            unchanged and red marks decrease, which matches common expectations for growth and
+            decline. Outlined boxes around each area and continent make the hierarchy visible
+            without adding extra rectangles that would compete with the country rectangles for
+            attention.
+        </p>
+        <p class="justification">
+            The Squarify treemap keeps most rectangles close to a square shape. This makes
+            countries easier to compare because their proportions stay similar across the layout.
+            The Binary treemap recursively splits space into two groups at each step. This
+            produces longer, thinner rectangles in some areas, making small countries harder to
+            label. It keeps sibling countries grouped in a clear order. Comparing the two layouts
+            shows that segmentation strategy changes readability even though the data and
+            hierarchy stay the same.
+        </p>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab6.js?v=1"></script>
 
 </body>
 
