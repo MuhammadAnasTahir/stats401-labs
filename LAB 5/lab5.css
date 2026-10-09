@@ -1,0 +1,108 @@
+body.lab5-body {
+    max-width: 1180px;
+}
+
+.network-figure {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.network-legend-sidebar {
+    flex: 0 0 230px;
+    padding: 10px 6px;
+}
+
+.network-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    min-width: 320px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+#network-svg {
+    display: block;
+}
+
+.zoom-controls-side {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 10;
+}
+
+.zoom-controls-side button {
+    width: 34px;
+    height: 30px;
+    border: 1px solid #bbb;
+    background: #ffffff;
+    border-radius: 5px;
+    font-size: 15px;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+    padding: 0;
+}
+
+.zoom-controls-side button:hover {
+    background: #f0f0f0;
+}
+
+.zoom-controls-side button.reset-btn {
+    font-size: 9.5px;
+    font-weight: 600;
+}
+
+.figure-caption {
+    font-size: 12.5px;
+    color: #555;
+    margin-top: 10px;
+    line-height: 1.5;
+}
+
+.figure-caption-center {
+    text-align: center;
+}
+
+.matrix-figure {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.matrix-legend-sidebar {
+    flex: 0 0 220px;
+    padding: 10px 6px;
+}
+
+.matrix-wrap {
+    flex: 1 1 auto;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #ffffff;
+    padding: 8px;
+    overflow-x: auto;
+}
+
+dl.findings dt {
+    font-weight: bold;
+    margin-top: 20px;
+    color: #2a5d84;
+    font-size: 14px;
+}
+
+dl.findings dd {
+    margin: 6px 0 0 0;
+    line-height: 1.65;
+    font-size: 13px;
+}

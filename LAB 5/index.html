@@ -1,26 +1,238 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Lab 5</title>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="lab5.css?v=1">
+    <title>Lab 5 - Interactive Network Visualization</title>
 </head>
 
-<body>
+<body class="lab5-body">
 
-    <h1>Lab 5</h1>
+    <h1>Lab 5 - Interactive Network Visualization</h1>
 
-    <p>
-        Lab 5 will be added here.
-    </p>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+        <a href="../Individual Project – Visualization Critique and Redesign/index.html">Visualization Critique and Redesign</a>
+    </nav>
 
-    <a href="../index.html">
-        Back to home
-    </a>
+    <!-- ============ 1. Dataset Description ============ -->
+    <div class="dataset-section">
+        <h2>1. Dataset Description</h2>
+        <p>
+            The dataset represents a synthetic urban transit system of 50 stations and 50 direct
+            connections drawn from <code>data/lab5_assignment_stations.csv</code> and
+            <code>data/lab5_assignment_routes.csv</code>.
+        </p>
+        <p>
+            Nodes represent stations and have three variables. District is the station's geographic
+            zone, one of five: Central, North, South, East, or West. Daily passengers are the average
+            daily ridership and ranges from 1,373 to 9,850. Station type can either be Terminal,
+            Transfer, or Local.
+        </p>
+        <p>
+            Links represent routes between station pairs and have two variables. Travel time is the
+            direct travel time in minutes and ranges from 2 to 16. Route type is the service category
+            and can be either Metro, Express, or Shuttle.
+        </p>
+        <p>
+            The network is a sequential chain (s1 → s2 → … → s41) supplemented by ten cross-district
+            shortcuts. Five stations (s42, s43, s46, s48, s49) have no routes at all and appear as
+            isolated nodes. Four more (s44, s45, s47, s50) are reachable only via a single cross-link.
+        </p>
+    </div>
+
+    <!-- ============ 2. Node-Link Visualization ============ -->
+    <div class="dataset-section">
+        <h2>2. Node-Link Visualization</h2>
+        <p>
+            Node fill encodes district (five different colours), node size encodes daily passengers
+            (radius of the node) and node border encodes station type (solid = Terminal, dashed =
+            Transfer, none = Local). Link style encodes route type (solid = Express, dashed =
+            Shuttle, dotted = Metro) and link width encodes travel time. Zoom controls could be used
+            to inspect dense regions and nodes could be dragged to reposition them. A node could also
+            be hovered to highlight its direct neighbours and dim the rest.
+        </p>
+        <div class="network-figure">
+            <div class="network-legend-sidebar">
+                <svg id="network-legend-svg"></svg>
+            </div>
+            <div class="network-wrap">
+                <svg id="network-svg"></svg>
+                <div class="zoom-controls-side">
+                    <button id="net-zoom-in" title="Zoom in">+</button>
+                    <button id="net-zoom-out" title="Zoom out">&minus;</button>
+                    <button id="net-zoom-reset" class="reset-btn" title="Reset zoom">Reset</button>
+                </div>
+            </div>
+        </div>
+        <p class="figure-caption figure-caption-center">
+            <strong>Figure 1.</strong> Node-link diagram of the 50-station transit network.
+        </p>
+    </div>
+
+    <!-- ============ 3. Node-Link Design Description ============ -->
+    <div class="dataset-section">
+        <h2>3. Node-Link Design Description</h2>
+        <p class="justification">
+            District is mapped to node fill color using five distinct hues which makes geographic
+            information immediately readable across the full layout without hovering. Daily
+            passenger volume is mapped to node radius through a square-root scale so circle area is
+            proportional to volume. Nodes for the busiest stations (s46 through s50, over 9,000
+            passengers per day) are visibly larger than the stations which are less busy.
+        </p>
+        <p class="justification">
+            Station type is encoded through the circle border using pattern. Terminal stations carry
+            a solid dark ring, transfer stations carry a dashed ring of the same thickness and local
+            stations have no visible border. Pattern-based borders stay distinguishable even at small
+            node sizes where subtle color differences are easy to miss.
+        </p>
+        <p class="justification">
+            For links, route type is encoded through line style. A solid line marks express, a
+            dashed line marks shuttle and a dotted line marks metro. Color was deliberately removed
+            from this channel because district already uses node fill color and reusing color for
+            route type caused the two categorical encodings to compete for attention. Link width
+            encodes travel time so a thicker line signals a longer direct journey regardless of route
+            type.
+        </p>
+        <p class="justification">
+            Hovering a node dims all non-neighbours to 12% opacity and isolates its immediate
+            connections. Zoom controls let readers inspect dense regions without losing the overall
+            layout and nodes can be dragged to manually untangle local clusters.
+        </p>
+    </div>
+
+    <!-- ============ 4. Adjacency Matrix ============ -->
+    <div class="dataset-section">
+        <h2>4. Adjacency Matrix</h2>
+        <p>
+            Rows and columns each represent one station and are ordered by district (Central,
+            North, South, East, West). A filled cell indicates a direct connection and cell hue
+            encodes route type and cell shade/intensity encodes travel time (darker = longer
+            journey). A filled cell or a diagonal cell could be hovered for more details.
+        </p>
+        <div class="matrix-figure">
+            <div class="matrix-legend-sidebar">
+                <svg id="matrix-legend-svg"></svg>
+            </div>
+            <div class="matrix-wrap">
+                <svg id="matrix-svg"></svg>
+            </div>
+        </div>
+        <p class="figure-caption figure-caption-center">
+            <strong>Figure 2.</strong> Adjacency matrix of the 50-station network.
+        </p>
+    </div>
+
+    <!-- ============ 5. Matrix Design Description ============ -->
+    <div class="dataset-section">
+        <h2>5. Matrix Design Description</h2>
+        <p class="justification">
+            Stations are sorted by district (Central → North → South → East → West), grouping each
+            district into a contiguous 10-row and 10-column block. Row and column labels — and the
+            full district names along both axes — are colored by district to reinforce the grouping,
+            and thin dividing lines mark the block boundaries. When a direct connection exists, the
+            cell is colored by route type (Express, Shuttle, and Metro each have a distinct hue), and
+            cell shade scales with travel time so that darker cells indicate longer journeys. Empty
+            cells are near-white and the main diagonal is light grey.
+        </p>
+        <p class="justification">
+            The network's backbone is a chain that cycles through all five districts consecutively,
+            and most filled cells appear outside the diagonal blocks, which confirms that nearly
+            every direct connection crosses district boundaries.
+        </p>
+    </div>
+
+    <!-- ============ 6. Network Questions and Findings ============ -->
+    <div class="dataset-section">
+        <h2>6. Network Questions and Findings</h2>
+
+        <dl class="findings">
+
+            <dt>1. Which stations appear central in the network?</dt>
+            <dd>
+                This is best answered by the node-link diagram. Stations at the junction of a chain
+                segment and a cross-link shortcut have degree 3 and settle toward the interior of the
+                force layout. These include s21 (Central, chain + s21–s41 shortcut), s29 (East, chain
+                + s29–s50 shortcut), and s33 (South, chain + s33–s44 shortcut). Similarly, cross-link
+                targets that are also embedded in the chain (s16, s23, s31, s34, s38) are visually
+                more embedded than pure chain nodes of degree 2, which tend to string out along the
+                chain backbone toward the periphery.
+            </dd>
+
+            <dt>2. Which districts are strongly connected to one another?</dt>
+            <dd>
+                Both visualizations help in this question. The chain cycles through all five
+                districts in the repeating order Central→North→South→East→West, so every adjacent
+                district pair is connected through the chain. The adjacency matrix makes this
+                structural pattern clear: filled cells appear in every off-diagonal district block,
+                and no district block is noticeably denser than any other, confirming that district
+                connectivity is uniformly distributed. In the node-link diagram, the five district
+                colors are thoroughly interspersed, and no district forms a tight visual cluster.
+            </dd>
+
+            <dt>3. Where are transfer or terminal stations located in the topology?</dt>
+            <dd>
+                The node-link diagram is most useful. Terminal stations (solid dark border) and
+                Transfer stations (dashed border of the same thickness) alternate through the chain
+                in the repeating pattern Terminal → Transfer → Local → Terminal → …, each Terminal
+                flanked by Transfer and Local neighbors. Hovering any Terminal confirms it connects to
+                exactly one or two non-Terminal neighbors. No district concentrates high-functional-role
+                stations, and they are uniformly distributed throughout the network.
+            </dd>
+
+            <dt>4. Which stations have high passenger volume?</dt>
+            <dd>
+                The node-link diagram is most useful. Passenger counts increase linearly from Station
+                1 (1,373/day) to Station 50 (9,850/day), so the largest circles in the layout
+                consistently belong to higher-numbered stations. Strikingly, four of the five
+                isolated stations (s42, s43, s46, s48) are among the higher-volume nodes yet have no
+                connecting links. They appear as sizable floating circles with no edges, making the
+                mismatch between operational demand and network connectivity immediately visible.
+            </dd>
+
+            <dt>5. Where are the longest direct travel-time connections?</dt>
+            <dd>
+                The node-link diagram is most useful. The thickest links belong to the
+                cross-connections: s7–s31 at 16 minutes (Express) is the longest, followed by
+                s18–s34 at 15 minutes (Express) and s29–s50 at 14 minutes (Express). These appear as
+                wide lines spanning large distances across the layout, contrasting sharply with the
+                typical chain links of 2–12 minutes that appear noticeably thinner. Travel time in
+                the matrix is encoded only through cell shade, which makes ranking across cells
+                harder than reading width in the node-link view.
+            </dd>
+
+            <dt>6. Are particular route types concentrated in particular parts of the network?</dt>
+            <dd>
+                Both views confirm no geographic concentration. In the node-link diagram, link styles
+                (solid Express, dashed Shuttle, dotted Metro) alternate in a fixed repeating cycle
+                through the chain, and no district shows a predominance of any single style.
+                Hovering stations in different districts reveals a consistent mix of all three route
+                types in the surrounding links. The adjacency matrix confirms the same: colored cells
+                are scattered evenly across all district blocks with no route type clustered in any
+                particular quadrant. Route type in this synthetic network is a purely cyclical
+                attribute, not geographically determined.
+            </dd>
+
+        </dl>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab5.js?v=1"></script>
 
 </body>
 
