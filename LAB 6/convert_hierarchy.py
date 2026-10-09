@@ -42,7 +42,7 @@ hierarchy = {
     )
 }
 
-with open("../data/lab6_gdp_hierarchy.json", "w", encoding="utf-8") as f:
+with open("lab6_gdp_hierarchy.json", "w", encoding="utf-8") as f:
     json.dump(hierarchy, f, indent=2, ensure_ascii=False)
 
 print(f"Wrote lab6_gdp_hierarchy.json with {len(df)} countries")

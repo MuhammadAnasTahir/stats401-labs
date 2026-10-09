@@ -8,7 +8,7 @@ const STATUS_COLORS = {
 
 const tooltip = d3.select("#tooltip");
 
-d3.json("../data/lab6_gdp_hierarchy.json").then(data => {
+d3.json("lab6_gdp_hierarchy.json").then(data => {
     renderTreemap(data, "#treemap1-svg", "#treemap1-legend-svg", d3.treemapSquarify);
     renderTreemap(data, "#treemap2-svg", "#treemap2-legend-svg", d3.treemapBinary);
 });
