@@ -1,26 +1,213 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Lab 7</title>
-
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="lab7.css?v=3">
+    <title>Lab 7 - Animated Temporal Commercial Network</title>
 </head>
 
-<body>
+<body class="lab7-body">
 
-    <h1>Lab 7</h1>
+    <h1>Lab 7 - Animated Temporal Commercial Network</h1>
 
-    <p>
-        Lab 7 will be added here.
-    </p>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+        <a href="../Individual Project – Visualization Critique and Redesign/index.html">Visualization Critique and Redesign</a>
+    </nav>
 
-    <a href="../index.html">
-        Back to home
-    </a>
+    <!-- ============ 1. Dataset Description ============ -->
+    <div class="dataset-section">
+        <h2>1. Dataset Description</h2>
+        <p>
+            The dataset describes a fabricated commercial network of 12 companies across 7
+            sectors and 3 regions. Company data comes from
+            <code>data/lab7_assignment_companies.csv</code>. Each company belongs to one sector
+            such as manufacturing, logistics, retail, food, technology, wholesale or material.
+            Regions include Asia, Europe or North America. Four companies belong to each region.
+        </p>
+        <p>
+            Transaction data comes from
+            <code>data/lab7_assignment_transactions_60days.csv</code>, which records 368
+            transactions across 60 days, from January 1 to March 1, 2026. Each transaction links
+            two companies and reports a dollar amount, a transaction type and a transaction count.
+            Transaction type is one of five categories: services, goods, shipping, components or
+            materials. Transaction amounts range from about 7,330 dollars to about 33,890 dollars.
+            On a typical day, between 3 and 10 of the 27 company pairs that trade at some point
+            have an active transaction. Links are treated as undirected for this visualization.
+        </p>
+    </div>
+
+    <!-- ============ 2. Temporal Network Visualization ============ -->
+    <div class="dataset-section">
+        <h2>2. Temporal Network Visualization</h2>
+        <p>
+            Hover a node (company) for its sector, region and current transaction volume. Hover a
+            link for its two companies, amount, type and date. Use play, pause, reset or the
+            slider to move through the 60 days. Zoom functionality could be used to inspect nodes
+            and links closely.
+        </p>
+
+        <div class="temporal-controls">
+            <button id="play-btn">Play</button>
+            <button id="pause-btn">Pause</button>
+            <button id="reset-btn">Reset</button>
+            <input type="range" id="time-slider" min="1" max="60" value="1">
+            <span id="current-day-label" class="day-label">Day 1</span>
+            <span id="day-date-label" class="date-label"></span>
+        </div>
+
+        <div class="network-figure">
+            <div class="network-legend-sidebar">
+                <svg id="network-legend-svg"></svg>
+            </div>
+            <div class="network-main">
+                <div id="summary-stats" class="summary-stats"></div>
+                <div class="network-wrap">
+                    <svg id="network-svg"></svg>
+                    <div class="zoom-controls-side">
+                        <button id="net-zoom-in" title="Zoom in">+</button>
+                        <button id="net-zoom-out" title="Zoom out">&minus;</button>
+                        <button id="net-zoom-reset" class="reset-btn" title="Reset zoom">Reset</button>
+                    </div>
+                </div>
+                <p class="figure-caption figure-caption-center">
+                    <strong>Figure 1.</strong> Animated commercial network across 60 days.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============ 3. Design Description ============ -->
+    <div class="dataset-section">
+        <h2>3. Design Description</h2>
+        <p class="justification">
+            Sector is encoded through node fill color since sector is the main category a reader
+            would want to scan at a glance and color is the clearest channel for seven categories.
+            Region is encoded through node border so it does not compete with sector. Asia gets a
+            solid border, Europe a dashed border and North America no border. Current transaction
+            volume is encoded through node radius and is recalculated every day from the links
+            active that day so a company can grow or shrink from one frame to the next. A company
+            with no active link on a given day is drawn small and dimmed, rather than removed,
+            which keeps every company visible across all 60 days.
+        </p>
+        <p class="justification">
+            Transaction amount is encoded through link width. Transaction type is encoded through
+            line style so the visualization never uses color for two different categorical
+            variables at once. Services is solid, goods is dashed, shipping is dotted, components
+            is a dash-dot pattern and materials is a long dash.
+        </p>
+        <p class="justification">
+            A force-directed network can rearrange itself completely from one frame to the next if
+            the simulation is rebuilt each time which makes it hard for a viewer to track which
+            circle is which company as the day changes. The 12 company nodes are created once when
+            the page loads and reused for all 60 day so no node ever loses its identity. Each link
+            is bound to its source and target company pair as a key so a relationship that stays
+            active across two consecutive days reuses the same line element instead of being
+            removed and redrawn and only a relationship that truly appears or disappears triggers
+            a fade. Changing the day only restarts the existing force simulation at a low alpha
+            rather than creating a new one so nodes drift gradually toward their next layout
+            instead of snapping to new positions. These choices preserve the viewer mental map of
+            where each company sits from one day to the next.
+        </p>
+        <p class="justification">
+            Links join and leave the network as the day changes. A new link fades in and a link
+            that is no longer active fades out and is removed, which makes the change itself
+            visible instead of hiding it inside an instant cut. A play, pause and reset control and
+            a 60-day slider let a reader either watch the network evolve or stop on a specific day
+            to inspect it, and a running summary reports the active company count, active link
+            count and total transaction value for the current day.
+        </p>
+    </div>
+
+    <!-- ============ 4. Temporal Network Questions and Findings ============ -->
+    <div class="dataset-section">
+        <h2>4. Temporal Network Questions and Findings</h2>
+
+        <dl class="findings">
+
+            <dt>1. How does overall network connectivity change across the 60 days?</dt>
+            <dd>
+                Dragging the slider across the 60 days shows connectivity rising unevenly rather
+                than smoothly. Early days such as Day 1, Day 7 and Day 19 each show only 3 active
+                links and 6 active companies in the summary line with a total transaction value
+                under 50,000 dollars. By Day 45 the summary line reads 10 active links, 12 active
+                companies and a total value of about 196,000 dollars, and Day 60 still shows 9
+                active links with all 12 companies active and a total of about 178,000 dollars. If
+                the animation is played, the network starts as a few small and disconnected pairs
+                and becomes a single denser web by the later days, with noticeably more and
+                thicker links on screen.
+            </dd>
+
+            <dt>2. Which companies become more central or commercially active over time?</dt>
+            <dd>
+                Hovering BlueRiver Logistics on different days shows its activity swinging sharply
+                rather than rising steadily. On Day 1 and Day 40 it has no active link and appears
+                small and dimmed, while on Day 20 and Day 60 it shows 2 active links with a
+                tooltip volume of about 26,500 and 35,400 dollars. Ion Systems ends larger, with 1
+                link and about 20,500 dollars on Day 1 versus 2 links and about 50,700 dollars on
+                Day 60, directly visible as a bigger circle when comparing the two days. Companies
+                such as Cedar Retail also pick up new connections by Day 45 and Day 60 that were
+                not present in early January, visible as new links fading in around a node that
+                previously had only one neighbor.
+            </dd>
+
+            <dt>3. Are there periods when the network consists of relatively separate clusters?</dt>
+            <dd>
+                Yes, and this is visible just by counting the separate clumps of nodes on screen
+                at different points on the slider. Day 1, Day 7 and Day 19 each show the network
+                broken into many small, disconnected pieces, mostly single isolated companies plus
+                3 small pairs. By Day 30 the picture consolidates into fewer, larger clumps, and
+                by Day 45 and Day 60 nearly the entire network reads as one connected mass with
+                only a couple of companies still separate. Moving slowly from an early day to a
+                later day makes this consolidation visible as disconnected groups gradually
+                merging through newly appearing links.
+            </dd>
+
+            <dt>4. Which commercial relationships appear, disappear, or become stronger over time?</dt>
+            <dd>
+                Hovering the same link on two different days it is active shows some
+                relationships growing noticeably stronger. The Fusion Electronics to Granite
+                Wholesale link is thin and solid on Day 20, with a tooltip amount of about 8,000
+                dollars and type services, but from Day 22 onward the same link appears visibly
+                thicker and dash-dot, with a tooltip amount above 20,000 dollars and type
+                components. The Ion Systems to Juniper Stores link follows a gentler version of
+                the same pattern, with tooltip amounts around 11,000 to 14,000 dollars in January
+                rising to around 19,000 to 22,000 dollars from mid-February onward, visible as the
+                line growing steadily thicker each time it reappears on the slider.
+            </dd>
+
+            <dt>5. Does the network become more or less cross-regional over time?</dt>
+            <dd>
+                Comparing the region borders on active links from two different days suggests the
+                network leans slightly more cross-regional later on. On Day 3, 2 of the 4 active
+                links connect two companies in different regions. On Day 58, 3 of the 5 active
+                links are cross-regional, including links from Ion Systems, a no-border North
+                America company, reaching into both a dashed-border Europe company and
+                solid-border Asia companies. The mix of border styles connected by links does look
+                more varied on later days than on earlier ones.
+            </dd>
+
+        </dl>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab7.js?v=6"></script>
 
 </body>
 
