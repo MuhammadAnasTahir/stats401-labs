@@ -34,10 +34,10 @@ const TYPE_DASH = {
 
 const tooltip = d3.select("#tooltip");
 
-let companies, transactionsByDay, dayDateMap;
+let companies, companyById, transactionsByDay, dayDateMap;
 let currentDay = 1;
 let timer = null;
-let simulation, linkGroup, linkSel, linkHitSel, nodeSel, labelSel;
+let linkGroup, nodeSel, labelSel;
 let rScale, wScale;
 let NET_W, NET_H;
 
@@ -51,21 +51,24 @@ Promise.all([
     }))
 ]).then(([companiesData, tx]) => {
     companies = companiesData;
+    companyById = new Map(companies.map(c => [c.id, c]));
     transactionsByDay = d3.group(tx, d => d.day);
 
     dayDateMap = new Map();
     tx.forEach(d => { if (!dayDateMap.has(d.day)) dayDateMap.set(d.day, d.date); });
 
+    const { globalMax, perCompanyMax } = volumeStats(tx);
     wScale = d3.scaleLinear().domain(d3.extent(tx, d => d.amount)).range([1.2, 6]);
-    rScale = d3.scaleSqrt().domain([0, maxDailyVolume(tx)]).range([5, 26]);
+    rScale = d3.scaleSqrt().domain([0, globalMax]).range([5, 26]);
 
-    init();
+    init(tx, perCompanyMax);
     showDay(1);
 });
 
-// Largest single-day total volume any one company reaches, used so the size
-// scale stays fixed and comparable across every frame of the animation.
-function maxDailyVolume(tx) {
+// Largest single-day volume overall (fixes the size scale) and per company
+// (used so each node's one-time layout position reserves enough collision
+// space for its own worst-case size, never just an average/neutral one).
+function volumeStats(tx) {
     const byDayCompany = new Map();
     tx.forEach(d => {
         [d.source, d.target].forEach(id => {
@@ -73,19 +76,66 @@ function maxDailyVolume(tx) {
             byDayCompany.set(key, (byDayCompany.get(key) || 0) + d.amount);
         });
     });
-    return d3.max(Array.from(byDayCompany.values()));
+    let globalMax = 0;
+    const perCompanyMax = new Map();
+    byDayCompany.forEach((val, key) => {
+        const id = key.slice(key.indexOf("|") + 1);
+        perCompanyMax.set(id, Math.max(perCompanyMax.get(id) || 0, val));
+        if (val > globalMax) globalMax = val;
+    });
+    return { globalMax, perCompanyMax };
 }
 
 function linkKey(d) {
-    const s = typeof d.source === "object" ? d.source.id : d.source;
-    const t = typeof d.target === "object" ? d.target.id : d.target;
-    return s < t ? `${s}-${t}` : `${t}-${s}`;
+    return d.source.id < d.target.id ? `${d.source.id}-${d.target.id}` : `${d.target.id}-${d.source.id}`;
+}
+
+// ======================== One-time layout ========================
+
+// Every company's x/y is computed once, from the aggregate set of company
+// pairs that trade at any point across all 60 days, then frozen permanently.
+// Only node radius, node opacity, and which links are drawn change from day
+// to day — nodes themselves never move again. An earlier version reheated
+// the force simulation on every day change, which let the link force pull
+// nodes toward wherever that specific day's neighbors were, and watching it
+// made nodes visibly drift or jump around day to day — exactly what
+// preserving the viewer's mental map is supposed to prevent.
+function computeLayout(tx, perCompanyMax, W, H) {
+    const pairMap = new Map();
+    tx.forEach(l => {
+        const key = [l.source, l.target].sort().join("-");
+        if (!pairMap.has(key)) pairMap.set(key, { source: l.source, target: l.target });
+    });
+    const layoutLinks = Array.from(pairMap.values());
+
+    // This only ever runs once, so it can afford a much stronger repulsion
+    // than a live, continuously-reheated simulation safely could — the goal
+    // here is simply to spread the one-time layout out to use the canvas
+    // well, not to stay stable under constant daily disturbance.
+    const layoutSim = d3.forceSimulation(companies)
+        .force("link",    d3.forceLink(layoutLinks).id(d => d.id).distance(130))
+        .force("charge",  d3.forceManyBody().strength(-420))
+        .force("center",  d3.forceCenter(W / 2, H / 2))
+        .force("x",       d3.forceX(W / 2).strength(0.05))
+        .force("y",       d3.forceY(H / 2).strength(0.05))
+        .force("collide", d3.forceCollide(d => rScale(perCompanyMax.get(d.id) || 0) + 10).strength(0.9))
+        .stop();
+
+    for (let i = 0; i < 400; i++) layoutSim.tick();
+
+    // Clamp once to the canvas, using each company's own largest possible
+    // radius so it can never spill outside the frame even on its biggest day.
+    companies.forEach(d => {
+        const r = rScale(perCompanyMax.get(d.id) || 0);
+        d.x = Math.max(r + 4, Math.min(W - r - 4, d.x));
+        d.y = Math.max(r + 16, Math.min(H - r - 4, d.y));
+    });
 }
 
 // ======================== Setup ========================
 
-function init() {
-    const W = 980, H = 650;
+function init(tx, perCompanyMax) {
+    const W = 1060, H = 700;
     NET_W = W; NET_H = H;
     const svg = d3.select("#network-svg").attr("width", W).attr("height", H);
     const zoomLayer = svg.append("g").attr("class", "zoom-layer");
@@ -93,24 +143,13 @@ function init() {
     linkGroup = zoomLayer.append("g").attr("class", "links");
     const nodeGroup = zoomLayer.append("g").attr("class", "nodes");
 
-    simulation = d3.forceSimulation(companies)
-        .force("link",    d3.forceLink([]).id(d => d.id).distance(115))
-        .force("charge",  d3.forceManyBody().strength(-220))
-        .force("center",  d3.forceCenter(W / 2, H / 2))
-        // forceCenter only recenters the average position, it does not pull
-        // individual nodes inward. On sparse days, with little link force to
-        // counteract charge repulsion, nodes drift toward the far edges of a
-        // large canvas. A gentle pull toward the middle keeps every day's
-        // layout compact, so a bigger canvas helps dense days without making
-        // sparse days look scattered and lost in empty space.
-        .force("x", d3.forceX(W / 2).strength(0.06))
-        .force("y", d3.forceY(H / 2).strength(0.06))
-        .force("collide", d3.forceCollide(d => rScale(d.volume || 0) + 10).strength(0.85))
-        .on("tick", ticked);
+    computeLayout(tx, perCompanyMax, W, H);
 
     nodeSel = nodeGroup.selectAll("circle")
         .data(companies, d => d.id)
         .join("circle")
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y)
         .attr("r", 5)
         .attr("fill", d => SECTOR_COLORS[d.sector])
         .attr("stroke", d => REGION_STYLE[d.region].color)
@@ -133,6 +172,8 @@ function init() {
     labelSel = nodeGroup.selectAll("text")
         .data(companies, d => d.id)
         .join("text")
+        .attr("x", d => d.x)
+        .attr("y", d => d.y - rScale(0) - 6)
         .attr("text-anchor", "middle")
         .attr("font-size", 10).attr("fill", "#222")
         .attr("paint-order", "stroke")
@@ -165,60 +206,31 @@ function init() {
     wireControls();
 }
 
-function ticked() {
-    // On sparse days there is little link force pulling nodes together, so
-    // charge repulsion alone can push them past the edge of the canvas.
-    // Clamping every tick guarantees every node stays fully inside the frame
-    // no matter how few links are active that day.
-    companies.forEach(d => {
-        const r = rScale(d.volume || 0);
-        d.x = Math.max(r + 4, Math.min(NET_W - r - 4, d.x));
-        d.y = Math.max(r + 16, Math.min(NET_H - r - 4, d.y));
-    });
-
-    if (linkSel)    linkSel.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
-                            .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
-    if (linkHitSel) linkHitSel.attr("x1", d => d.source.x).attr("y1", d => d.source.y)
-                               .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
-    nodeSel.attr("cx", d => d.x).attr("cy", d => d.y);
-    labelSel.attr("x", d => d.x).attr("y", d => d.y - rScale(d.volume || 0) - 6);
-}
-
 // ======================== Frame update ========================
-
-// d3.group groups by reference, so transactionsByDay.get(day) returns the
-// same array every time a given day is revisited. forceLink.links() below
-// mutates each link's source/target from a string id into the resolved node
-// object, permanently, on that shared array. On a day's first visit source
-// and target are still plain strings; on any later visit they are already
-// objects. This resolves either case to the plain string id so the volume
-// lookup never silently breaks on a revisit.
-function resolveId(x) {
-    return typeof x === "object" ? x.id : x;
-}
 
 function showDay(day) {
     currentDay = day;
-    const links = transactionsByDay.get(day) || [];
+    const rawLinks = transactionsByDay.get(day) || [];
 
     const volMap = new Map(companies.map(c => [c.id, 0]));
-    links.forEach(l => {
-        const s = resolveId(l.source), t = resolveId(l.target);
-        volMap.set(s, (volMap.get(s) || 0) + l.amount);
-        volMap.set(t, (volMap.get(t) || 0) + l.amount);
+    rawLinks.forEach(l => {
+        volMap.set(l.source, (volMap.get(l.source) || 0) + l.amount);
+        volMap.set(l.target, (volMap.get(l.target) || 0) + l.amount);
     });
     companies.forEach(c => { c.volume = volMap.get(c.id) || 0; });
 
-    // Resolve source/target into node references for this day's active links.
-    simulation.force("link").links(links);
+    // Resolve each row into its own object carrying real company references
+    // (fixed x/y already set) rather than mutating the shared source rows —
+    // nothing here is reused or overwritten on a later revisit to this day.
+    const links = rawLinks.map(l => ({
+        date: l.date, day: l.day, amount: l.amount, type: l.type, count: l.count,
+        source: companyById.get(l.source),
+        target: companyById.get(l.target)
+    }));
 
-    linkSel = linkGroup.selectAll("line.link")
+    const linkSel = linkGroup.selectAll("line.link")
         .data(links, linkKey)
         .join(
-            // A brand-new line has no x1/y1/x2/y2 until the next simulation
-            // tick sets one, which on a fresh day can lag a frame behind the
-            // paint and render as an invisible zero-length line at (0,0).
-            // Setting the current node position immediately removes that gap.
             enter => enter.append("line")
                 .attr("class", "link")
                 .attr("stroke", "#444")
@@ -237,7 +249,7 @@ function showDay(day) {
         );
 
     // Wide invisible hit-area so thin links stay easy to hover for a tooltip.
-    linkHitSel = linkGroup.selectAll("line.hit")
+    linkGroup.selectAll("line.hit")
         .data(links, linkKey)
         .join(
             enter => enter.append("line")
@@ -268,15 +280,12 @@ function showDay(day) {
         .attr("r", d => rScale(d.volume))
         .attr("fill-opacity", d => d.volume > 0 ? 1 : 0.35);
 
-    // Gentle reheat on the existing simulation, not a rebuild, so nodes drift
-    // toward their new positions instead of jumping (preserves the mental map).
-    simulation.alpha(0.3).restart();
+    // Label position (x fixed, y offset by the node's current radius) is the
+    // only thing about a label that ever changes day to day.
+    labelSel.transition().duration(500)
+        .attr("y", d => d.y - rScale(d.volume || 0) - 6);
 
-    // Apply current positions synchronously rather than waiting for the
-    // simulation's next async tick, so nothing is ever briefly unpositioned.
-    ticked();
-
-    const activeCompanies = new Set(links.flatMap(d => [d.source, d.target])).size;
+    const activeCompanies = new Set(links.flatMap(d => [d.source.id, d.target.id])).size;
     const totalValue = d3.sum(links, d => d.amount);
 
     d3.select("#current-day-label").text(`Day ${day}`);

@@ -6,7 +6,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="lab7.css?v=3">
+    <link rel="stylesheet" href="lab7.css?v=4">
     <title>Lab 7 - Animated Temporal Commercial Network</title>
 </head>
 
@@ -111,25 +111,23 @@
             is a dash-dot pattern and materials is a long dash.
         </p>
         <p class="justification">
-            A force-directed network can rearrange itself completely from one frame to the next if
-            the simulation is rebuilt each time which makes it hard for a viewer to track which
-            circle is which company as the day changes. The 12 company nodes are created once when
-            the page loads and reused for all 60 day so no node ever loses its identity. Each link
-            is bound to its source and target company pair as a key so a relationship that stays
-            active across two consecutive days reuses the same line element instead of being
-            removed and redrawn and only a relationship that truly appears or disappears triggers
-            a fade. Changing the day only restarts the existing force simulation at a low alpha
-            rather than creating a new one so nodes drift gradually toward their next layout
-            instead of snapping to new positions. These choices preserve the viewer mental map of
-            where each company sits from one day to the next.
+            Every company's x and y position is computed once, from the aggregate set of company
+            pairs that trade at any point across all 60 days, then frozen permanently, so nodes
+            never move again. Only a node's radius, a node's opacity, and which links are drawn
+            change from day to day. An earlier version instead reheated the force simulation on
+            every day change, letting that day's specific links pull nodes toward new positions
+            each time, and watching it made nodes visibly drift and jump around the screen, the
+            opposite of what preserving a viewer's mental map is meant to achieve. Each link is
+            also bound to its source and target company pair as a key, so a relationship that
+            stays active across two consecutive days reuses the same line element instead of being
+            removed and redrawn, and only a relationship that actually appears or disappears
+            triggers a fade.
         </p>
         <p class="justification">
-            Links join and leave the network as the day changes. A new link fades in and a link
-            that is no longer active fades out and is removed, which makes the change itself
-            visible instead of hiding it inside an instant cut. A play, pause and reset control and
-            a 60-day slider let a reader either watch the network evolve or stop on a specific day
-            to inspect it, and a running summary reports the active company count, active link
-            count and total transaction value for the current day.
+            A play, pause and reset control and a 60-day slider let a reader either watch the
+            network evolve or stop on a specific day to inspect it, and a running summary reports
+            the active company count, active link count and total transaction value for the
+            current day.
         </p>
     </div>
 
@@ -207,7 +205,7 @@
     <div id="tooltip" class="tooltip"></div>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab7.js?v=6"></script>
+    <script src="lab7.js?v=8"></script>
 
 </body>
 
