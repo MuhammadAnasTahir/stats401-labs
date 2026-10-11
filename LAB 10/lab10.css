@@ -1,0 +1,163 @@
+body.lab10-body {
+    max-width: 1260px;
+}
+
+.lab10-layout {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-top: 10px;
+}
+
+.lab10-main {
+    /* min-width:0 overrides the flex default of min-width:auto, which
+       otherwise refuses to shrink a flex item below its content's natural
+       width — a wide 9-column table was forcing the whole row to wrap
+       instead of letting the table scroll horizontally inside its own box. */
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 936px;
+}
+
+.lab10-main .filters {
+    align-items: flex-end;
+}
+
+.lab10-main .table-container {
+    max-height: 420px;
+    overflow-x: auto;
+}
+
+.lab10-main table {
+    font-size: 12px;
+}
+
+.lab10-main th,
+.lab10-main td {
+    padding: 4px 8px;
+}
+
+#run-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+    border: 1px solid #2a5d84;
+    background: #2a5d84;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#run-btn:hover {
+    background: #1e4766;
+}
+
+#reset-btn {
+    padding: 6px 16px;
+    font-size: 13px;
+    border: 1px solid #bbb;
+    background: #fff;
+    color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#reset-btn:hover {
+    background: #f0f0f0;
+}
+
+.lab10-sidebar {
+    flex: 0 0 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.interaction-panel,
+.feedback-panel {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 12px 14px;
+    background: #fafafa;
+}
+
+.interaction-panel h3,
+.feedback-panel h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #222;
+}
+
+.interaction-panel button {
+    border: 1px solid #bbb;
+    background: #fff;
+    border-radius: 5px;
+    padding: 6px 14px;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.interaction-panel button:hover {
+    background: #eef3f8;
+}
+
+.interaction-panel button.active {
+    background: #2a5d84;
+    color: white;
+    border-color: #2a5d84;
+}
+
+.status-text {
+    font-size: 12.5px;
+    color: #666;
+    margin: 8px 0 0 0;
+}
+
+#camera {
+    width: 100%;
+    max-width: 260px;
+    margin-top: 10px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #000;
+    transform: scaleX(-1); /* mirror, like a selfie view */
+}
+
+.feedback-row {
+    margin-bottom: 10px;
+}
+
+.feedback-row:last-child {
+    margin-bottom: 0;
+}
+
+.feedback-label {
+    display: block;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #888;
+    margin-bottom: 2px;
+}
+
+.feedback-value {
+    display: block;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #222;
+    word-break: break-word;
+}
+
+.feedback-value.flash {
+    animation: feedback-flash 0.5s ease;
+}
+
+@keyframes feedback-flash {
+    0%   { color: #2a5d84; }
+    100% { color: #222; }
+}
+
+.interaction-help code {
+    background: #eee;
+    padding: 1px 4px;
+    border-radius: 3px;
+}

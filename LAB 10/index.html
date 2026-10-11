@@ -1,26 +1,212 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
-
-    <title>Lab 10</title>
-
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="lab10.css?v=4">
+    <title>Lab 10 - Novel Interaction with Visualizations</title>
 </head>
 
-<body>
+<body class="lab10-body">
 
-    <h1>Lab 10</h1>
+    <h1>Lab 10: Novel Interaction with Visualizations</h1>
 
-    <p>
-        Lab 10 will be added here.
-    </p>
+    <nav class="lab-nav">
+        <a href="../index.html">Home</a>
+        <a href="../LAB 1/index.html">Lab 1</a>
+        <a href="../LAB 2/index.html">Lab 2</a>
+        <a href="../LAB 3/index.html">Lab 3</a>
+        <a href="../LAB 4/index.html">Lab 4</a>
+        <a href="../LAB 5/index.html">Lab 5</a>
+        <a href="../LAB 6/index.html">Lab 6</a>
+        <a href="../LAB 7/index.html">Lab 7</a>
+        <a href="../LAB 8/index.html">Lab 8</a>
+        <a href="../LAB 9/index.html">Lab 9</a>
+        <a href="../LAB 10/index.html">Lab 10</a>
+        <a href="../Individual Project – Visualization Critique and Redesign/index.html">Visualization Critique and Redesign</a>
+    </nav>
 
-    <a href="../index.html">
-        Back to home
-    </a>
+    <!-- ============ 1. Base Visualization (reused from Lab 3) ============ -->
+    <div class="dataset-section">
+
+        <h2>1. Base Visualization: Global Earthquakes (Last 2 Months)</h2>
+        <p>
+            This lab reuses the lab 3 earthquake table and filters exactly as built. It adds new
+            features below with voice and hand gesture control.<br>
+            <strong>Source:</strong> USGS Earthquake Hazards Program API
+            (earthquake.usgs.gov/fdsnws/event/1/query). A public API which is suitable for this
+            kind of programmatic access.<br>
+            <strong>Method:</strong> API requests with Python, paginated with limit/offset and
+            saved to CSV with pandas.
+        </p>
+
+        <div class="lab10-layout">
+
+            <!-- ---- Main: filters + table (same as Lab 3, plus a Run button) ---- -->
+            <div class="lab10-main">
+
+                <div class="filters">
+                    <label>Min Magnitude
+                        <input type="number" step="0.1" id="filter-mag-min" class="filter-control">
+                    </label>
+                    <label>Max Magnitude
+                        <input type="number" step="0.1" id="filter-mag-max" class="filter-control">
+                    </label>
+                    <label>Min Depth (km)
+                        <input type="number" step="1" id="filter-depth-min" class="filter-control">
+                    </label>
+                    <label>Max Depth (km)
+                        <input type="number" step="1" id="filter-depth-max" class="filter-control">
+                    </label>
+                    <label>Type
+                        <select id="filter-type" class="filter-control">
+                            <option value="all">All</option>
+                        </select>
+                    </label>
+                    <label>Status
+                        <select id="filter-status" class="filter-control">
+                            <option value="all">All</option>
+                        </select>
+                    </label>
+                    <label>&nbsp;
+                        <button id="run-btn">Run</button>
+                    </label>
+                    <label>&nbsp;
+                        <button id="reset-btn">Reset</button>
+                    </label>
+                </div>
+
+                <p id="record-count"></p>
+
+                <div class="table-container">
+                    <table id="data-table">
+                        <thead>
+                            <tr>
+                                <th data-col="id">ID</th>
+                                <th data-col="time">Time</th>
+                                <th data-col="place">Place</th>
+                                <th data-col="magnitude">Magnitude</th>
+                                <th data-col="latitude">Latitude</th>
+                                <th data-col="longitude">Longitude</th>
+                                <th data-col="depth">Depth (km)</th>
+                                <th data-col="type">Type</th>
+                                <th data-col="status">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body"></tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <!-- ---- Sidebar: novel interaction controls + feedback ---- -->
+            <div class="lab10-sidebar">
+
+                <div class="interaction-panel">
+                    <h3>Voice Control</h3>
+                    <button id="voice-button">Start Voice Control</button>
+                    <p id="voice-status" class="status-text">Voice control inactive</p>
+                </div>
+
+                <div class="interaction-panel">
+                    <h3>Hand Gesture Control</h3>
+                    <button id="camera-button">Start Camera</button>
+                    <p id="camera-status" class="status-text">Camera inactive</p>
+                    <video id="camera" autoplay playsinline muted></video>
+                </div>
+
+                <div class="feedback-panel">
+                    <h3>Feedback</h3>
+                    <div class="feedback-row">
+                        <span class="feedback-label">Heard (voice)</span>
+                        <span id="feedback-heard" class="feedback-value">&mdash;</span>
+                    </div>
+                    <div class="feedback-row">
+                        <span class="feedback-label">Detected (gesture)</span>
+                        <span id="feedback-detected" class="feedback-value">&mdash;</span>
+                    </div>
+                    <div class="feedback-row">
+                        <span class="feedback-label">Executed</span>
+                        <span id="feedback-executed" class="feedback-value">&mdash;</span>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ============ 2. How to Use ============ -->
+    <div class="dataset-section interaction-help">
+        <h2>2. How to Use</h2>
+        <p>
+            <strong>Voice:</strong> click &ldquo;Start Voice Control&rdquo; or press the
+            <code>space bar</code> and then speak a command. One spoken phrase can contain several
+            commands at once, chained with &ldquo;and&rdquo; or by repeating &ldquo;set,&rdquo;
+            for example &ldquo;set minimum magnitude to 5 and maximum magnitude to 7.&rdquo;
+            After the first click, listening restarts automatically after every command, so only
+            one click is ever needed per session. Click the button again or press space again to
+            stop.
+        </p>
+        <p>
+            Recognized commands: <code>set minimum magnitude to 5</code>,
+            <code>set maximum magnitude to 7</code>, <code>set minimum depth to 10</code>,
+            <code>set maximum depth to 100</code>, <code>select type as earthquake</code> (or
+            landslide, or all), <code>select status as reviewed</code> (or automatic, or all),
+            <code>start camera</code>, <code>stop camera</code>, <code>run</code>, or
+            <code>reset</code> (reset also clears the feedback panel back to its starting state).
+        </p>
+        <p>
+            <strong>Gesture:</strong> click &ldquo;Start Camera&rdquo; or say &ldquo;start
+            camera,&rdquo; then show one hand to the camera. An open palm runs the current
+            filters, a closed fist resets every filter, a thumb-down scrolls the table down, and
+            a thumb-up scrolls the table back up. A short cooldown after each detected gesture
+            stops one held pose from repeating the same action many times a second.
+        </p>
+        <p>
+            <strong>Fallback:</strong> every filter, the run button, and the table header sorting
+            all still work with a normal mouse click or keyboard entry with or without voice or
+            camera access.
+        </p>
+    </div>
+
+    <!-- ============ 3. Design Reflection ============ -->
+    <div class="dataset-section">
+        <h2>3. Design Reflection</h2>
+        <p class="justification">
+            This lab extends the Lab 3 earthquake table and its six filters with two novel
+            interaction modalities. Voice commands, using the browser Web Speech API, can set the
+            numeric filters, choose the type or status dropdown, start or stop the camera, apply
+            the filters by saying run, or clear everything by saying reset. A single utterance can
+            carry several chained commands and listening restarts automatically after each
+            command, so only one click or key press is needed per session.
+        </p>
+        <p class="justification">
+            Hand gestures, using the MediaPipe Gesture Recognizer on the webcam feed, map an open
+            palm to running the filters, a closed fist to resetting them and a thumb down or thumb
+            up to scrolling the table down or up. Both modalities support the same task the mouse
+            controls already support: narrowing 1,500 earthquake records down to a relevant subset
+            by magnitude, depth, type and status, then reading through the results. Voice suits
+            this task because stating several filter values in one sentence is faster than
+            clicking into each field in turn, and gesture suits it because open palm, closed fist,
+            and a thumb pointing up or down are easy, visually distinct poses that work well as
+            one-shot commands without needing a free hand on the mouse. Voice recognition handled
+            clear phrases well but occasionally missed a command or misheard a number in a noisy
+            room. Gesture recognition needed decent lighting and a hand held close to the camera,
+            and a relaxed hand was sometimes read as a weak closed fist, which the cooldown timer
+            helped with.
+        </p>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab10.js?v=5"></script>
+    <script type="module" src="gesture.js?v=1"></script>
 
 </body>
 
